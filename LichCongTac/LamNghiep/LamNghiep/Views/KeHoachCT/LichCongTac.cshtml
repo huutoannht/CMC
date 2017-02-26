@@ -1,0 +1,83 @@
+﻿@{
+    Layout = null;   
+}
+@Styles.Render("~/Content/fullcalendarcss")
+<link href="~/Content/fullcalendar.min.css" rel="stylesheet" />
+@Scripts.Render("~/bundles/modernizr")
+<script src="~/Scripts/moment.js"></script>
+
+@Scripts.Render("~/bundles/fullcalendarjs")
+<script src="~/Scripts/lang-all.js"></script>
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+            $('#calendar').fullCalendar('render');
+        });
+        $('.nav-tabs a:first').tab('show');
+
+        $('#calendar').fullCalendar({
+            lang: 'vi',
+            theme: true,
+            header: {
+                left: 'prev,next today',
+                center: 'title',
+                right: 'month,agendaWeek,agendaDay'
+            },
+
+            defaultView: 'agendaWeek',
+            editable: false,
+            allDaySlot: true,
+            selectable: false,
+            slotMinutes: 30,
+            minTime: "06:00:00",
+            maxTime: "21:00:00",
+            events: "/api/LamNghiepApi/GetLichCongTac",
+            eventClick: function (event) {
+                $("#myModal").modal("show");
+                console.log(event);
+                $('span#hotencanbo').html(event.title);
+                $('span#kehoachcongtac').html(event.description);
+                $('span#ngayketthuc').html(event.start._i);
+                $('span#thoigian').html(event.end._i);
+                $('span#diadiem').html(event.location);
+                $('span#thanhphan').html(event.attend);
+            }
+        });
+        $('.fc-prev-button').html('Tuần trước');
+        $('.fc-next-button').html('Tuần tới');
+    });
+</script>
+
+<style>
+    .fc-view-container table thead {
+        background-color: #dff0d8;
+        border-color: #d6e9c6;
+        color: #fff;
+    }
+
+    .fc-view-container table th {
+        padding: 5px 10px;
+    }
+    .im-centered-ct {
+        margin: auto;
+        max-width: 500px;
+    }
+</style>
+
+<ol class="breadcrumb" style="margin-bottom: 5px;">
+    <li><a href="/Home">Trang chủ</a></li>
+    <li class="active">Lịch công tác</li>
+</ol>
+<div class="row im-centered-ct">
+    <div class="col-md-12">
+        <h3> Xem lịch công tác của cán bộ</h3>
+    </div>
+</div>
+<div class="row">
+
+    <div class="col-md-12">
+        <div id="calendar"></div>
+    </div>
+
+</div>

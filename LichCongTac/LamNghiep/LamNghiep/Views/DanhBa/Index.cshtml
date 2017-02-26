@@ -1,0 +1,25 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script src="~/Content/SomeNote/summernote.min.js"></script>
+<script src="~/Content/SomeNote/summernote.js"></script>
+<script src="~/Content/SomeNote/lang/summernote-vi-VN.js"></script>
+<link href="~/Content/SomeNote/summernote.css" rel="stylesheet" />
+<div class="row">
+    <div class="col-md-12">
+        <h3>Danh bạ </h3>
+    </div>
+    <div class="col-md-12">
+        <div id="noidung">@Html.Raw(ViewBag.NoiDung)</div>
+    </div>
+</div>
+<div class="panel-footer">
+    &copy;Lâm nghiệp việt nam @DateTime.Now.Year
+    <span style="float:right">Hôm nay @DateTime.Today.ToString("dd/MM/yyyy")</span>
+</div>
+<script>
+    
+</script>
+

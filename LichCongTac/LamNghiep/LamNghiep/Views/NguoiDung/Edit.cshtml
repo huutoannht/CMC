@@ -1,0 +1,131 @@
+﻿@model LamNghiep.DTO.User
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style>
+
+</style>
+<link href="~/Content/css/stylepage-ct-canhan.css" rel="stylesheet" />
+<script src="~/Scripts/jquery.validate.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
+<div class="panel panel-green" id="panels">
+    <div class="panel-heading">
+        <h4><span class="title-panel"> @Html.ActionLink("Danh sách người dùng", "Index")/ Chỉnh sửa thông tin</span> <a href="/CTCaNhan/Index" style="color:#fff"><i class="fa fa-level-up" aria-hidden="true"></i></a></h4>
+    </div>
+    <div class="panel-body">
+        @using (Html.BeginForm(null, null, FormMethod.Post, new { id = "frmRegister" }))
+        {
+            <div class="form-horizontal">
+                <hr />
+                @Html.ValidationSummary(true)
+                <div class="form-group has-success">
+                    <div class="col-md-3 control-label">Tên đăng nhập</div>
+                    <div class="col-md-6">
+                       <b> @Html.DisplayFor(model => model.UserName, new { @class = "form-control control-label", @required = "required", @readonly = "readonly" })</b>
+                        @Html.HiddenFor(model=>model.UserName)
+                    </div>
+                </div>
+                <div class="form-group has-success">
+                    <div class="col-md-3 control-label">Họ tên <span style="color:red">*</span></div>
+                    <div class="col-md-6">
+                        @Html.TextBoxFor(model => model.HoTen, new { @class = "form-control", @required = "required" ,@autofocus = "autofocus"})
+                        @Html.ValidationMessageFor(model => model.HoTen)
+                    </div>
+                </div>
+                <div class="form-group has-success">
+                    <div class="col-md-3 control-label">Địa chỉ </div>
+                    <div class="col-md-6">
+                        @Html.TextBoxFor(model => model.DiaChi, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.DiaChi)
+                    </div>
+                </div>
+                <div class="form-group has-success">
+                    <div class="col-md-3 control-label">Phòng ban <span style="color:red">*</span></div>
+                    <div class="col-md-6">
+                        @Html.DropDownList("PhongBan", null, new { @class = " form-control" })
+                    </div>
+                </div>
+                <div class="form-group has-success">
+                    <div class="col-md-3 control-label">Chức vụ <span style="color:red">*</span></div>
+                    <div class="col-md-6">
+                        @Html.DropDownList("IdChucVu", null, new { @class = " form-control", @required = "required" })
+                    </div>
+                </div>
+                <div class="form-group has-success">
+                    <div class="col-md-3 control-label">Số điện thoại</div>
+                    <div class="col-md-6">
+                        @Html.TextBoxFor(model => model.SoDT, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.SoDT)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-md-offset-4 col-md-10" style="color:#fff!important;">
+                        <input type="submit" value="Cập nhật" class="btn btn-warning btn-submit" />
+                        <a class="btn btn-success" href="/NguoiDung" style="color: rgb(255, 255, 255)!important;">Hủy bỏ</a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+
+    <div class="panel-footer">
+        <div>
+            @Html.ActionLink("Trở lại danh sách người dùng", "Index")
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $.ajax({
+            type: "GET",
+            url: "/NguoiDung/GetChucVuTheoPhongBan",
+            data: { 'id': $('#PhongBan').val() },
+            success: function (result) {
+                var chucVu = $('#ChucVu');
+                console.log(result);
+                chucVu.empty();
+                for (var i = 0; i < result.length; i++) {
+                    chucVu.append('<option value=' + result[i].IdChucVu + '>' + result[i].TenChucVu + '</option>');
+                }
+            }
+        });
+        $('#PhongBan').change(function () {
+            $.ajax({
+                type: "GET",
+                url: "/NguoiDung/GetChucVuTheoPhongBan",
+                data: { 'id': $('#PhongBan').val() },
+                success: function (result) {
+                    var chucVu = $('#IdChucVu');
+                    chucVu.empty();
+                    for (var i = 0; i < result.length; i++) {
+                        chucVu.append('<option value=' + result[i].IdChucVu + '>' + result[i].TenChucVu + '</option>');
+                    }
+                }
+            })
+        })
+
+    })
+    //function CheckUserName(){
+    //     $.ajax({
+    //         type: "GET",
+    //         url: "/NguoiDung/CheckUserName",
+    //         data: { 'username': $('#UserName').val() },
+    //         success: function (result) {
+    //             alert(result);
+    //             console.log(result);
+    //             if (result) {
+    //                 return false;
+    //             }
+    //         },
+    //         error:function(err){
+    //             alert(err);
+    //             return false;
+    //         },
+    //         cache: false
+    //     })
+    // }
+</script>

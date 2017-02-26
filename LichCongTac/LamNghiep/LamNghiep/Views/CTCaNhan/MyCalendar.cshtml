@@ -1,0 +1,300 @@
+﻿@model IEnumerable<LamNghiep.DTO.KeHoachCT>
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<link href="~/Content/css/stylepage-ct-canhan.css" rel="stylesheet" />
+<script src="~/Scripts/bootstrap-notify.js"></script>
+<link href="~/Content/css/bootstrap-notify.css" rel="stylesheet" />
+<link href="~/Content/css/alert-blackgloss.css" rel="stylesheet" />
+<link href="~/Content/css/alert-bangtidy.css" rel="stylesheet" />
+
+<style>
+    table td {
+        white-space: pre-wrap;
+    }
+
+
+    span.dtr-data {
+        white-space: pre-wrap;
+    }
+    table td p {
+        border-top: 0px!important;
+    }
+    .text-delete{
+        color:red;
+        cursor:pointer;
+    }
+</style>
+<div class='notifications bottom-right'></div>
+<div class="modal fade " id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Kế hoạch công tác</h4>
+            </div>
+            <div class="modal-body">
+                <div class="alert alert-warning alert-datphong-cs">
+                    Còn <span id="ngayconlai"></span> ngày nữa
+                </div>
+                <div class="row">
+                    <div class="col-xs-3 col-md-3 control-label">Họ tên cán bộ :</div>
+                    <div class="col-xs-4 col-md-4">
+                        <span class="modal-content-span" id="hotencanbo"></span>
+                    </div>
+                    <div class="col-xs-5 col-md-5">
+                        <span class=""> Chức vụ: </span><span class="" id="chucvu"></span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-3 col-md-3 control-label"> Chủ trì :</div>
+                    <div class="col-xs-8 col-md-8 control-label">
+                        <span class="modal-content-span" id="chutri"></span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-4 col-md-4 control-label"> Kế hoạch công tác :</div>
+                    <div class="col-xs-8 col-md-8 control-label">
+                        <span class="modal-content-span" id="kehoachcongtac"></span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-3 col-md-3 control-label">Ngày bắt đầu :</div>
+                    <div class="col-xs-4  col-md-4 control-label">
+                        <span class="modal-content-span" id="thoigian"></span>
+                    </div>
+                    <div class="col-xs-2 col-md-2 control-label">
+                        <span>Từ giờ <i class="fa fa-clock-o" aria-hidden="true"></i></span>
+                        <span class="modal-content-span" id="tugio"></span>
+                    </div>
+                    <div class="col-xs-2  col-md-2 control-label">
+                        <span>Đến giờ <i class="fa fa-clock-o" aria-hidden="true"></i></span>
+                        <span class="modal-content-span" id="dengio"></span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-3 col-md-3 control-label">Ngày kết thúc :</div>
+                    <div class="col-xs-8  col-md-8 control-label">
+                        <span class="modal-content-span" id="ngayketthuc"></span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-3 col-md-3 control-label">Địa điểm :</div>
+                    <div class="col-xs-8  col-md-8 control-label">
+                        <span class="modal-content-span" id="diadiem"></span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-3 col-md-3 control-label">Tham dự : </div>
+                    <div class="col-xs-8 col-md-8 control-label">
+                        <span class="modal-content-span" id="thanhphan"></span>
+                    </div>
+                </div>
+                <div class="row" style="border:none;">
+                    <div class="col-xs-3 col-md-3 control-label">Nội dung:</div>
+                    <div class="col-xs-8  col-md-8 control-label">
+                        <span class="modal-content-span" id="noidung"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Đóng </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="panel with-nav-tabs panel-success">
+    <div class="panel-heading">
+        <ul class="nav nav-tabs">
+            <li class="active"><a href="#tab1success" data-toggle="tab"><i class="fa fa-home fa-3x" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;Lập danh sách CT cá nhân</a></li>
+            <li class="viewcalendar"><a href="#tab2success" data-toggle="tab"><i class="fa fa-calendar fa-3x" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp; Xem lịch công tác cá nhân</a></li>
+        </ul>
+    </div>
+    <div class="panel-body">
+        <div class="tab-content">
+            <div class="tab-pane fade active in" id="tab1success">
+                <div class="row">
+                    <div class="col-xs-12 col-md-12">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <a class="btn btn-default" href="/CTCaNhan/Create">  <i class="fa fa-pencil-square-o" aria-hidden="true"></i> Tạo mới KHCT cá nhân</a>
+                            </div>
+                            <div class="panel-body">
+                                <form>
+                                    <div class="form-horizontal">
+                                        <div class="form-group has-success">
+                                            <input id="search" type="hidden" value="@ViewBag.search"/>
+                                            <div class="col-md-2">
+                                                <input type="text" class="form-control" placeholder="Ngày bắt đầu" id="start-date" value="@ViewBag.startDate.ToString("dd/MM/yyyy")" />
+                                            </div>
+                                            <div class="col-md-2">
+                                                <input type="text" class="form-control" placeholder="Ngày kết thúc" id="end-date" value="@ViewBag.endDate.ToString("dd/MM/yyyy")" />
+                                            </div>
+                                            <div class="col-md-2">
+                                                <input type="submit" value="Tìm kiếm" class="btn btn-default" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+
+                                <table id="list" class="display responsive nowrap" cellspacing="0" style="width:100%">
+                                    <thead>
+                                        <tr>
+                                            <th>Tên sự kiện</th>
+                                            <th>Ngày</th>
+                                            <th>Thời gian</th>
+                                            <th>Mức độ </th>
+                                            <th>Địa điểm</th>
+                                            <th>Cán bộ tham gia</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td colspan="4" class="dataTables_empty">Xin đợi</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-pane fade" id="tab2success">@{Html.RenderAction("Details", "CTCaNhan");}</div>
+        </div>
+    </div>
+</div>
+<div class="panel-footer">
+    &copy;Lâm nghiệp việt nam @DateTime.Now.Year
+    <span style="float:right">Hôm nay @DateTime.Today.ToString("dd/MM/yyyy")</span>
+</div>
+<script src="~/Scripts/fnReloadAjax.js"></script>
+<script>
+
+    $(document).ready(function () {
+        loadData();
+        function loadData() {
+            listTable = $("#list").dataTable({
+                 "bSearchable": true ,
+                "bProcessing": true,
+                "bServerSide": true,
+                "scrollX": false,
+                "autoWidth": true,
+                "sAjaxSource": '@Url.Action("GetJsonMyCalendar", "CTCaNhan")',
+                "fnDrawCallback": function (oSettings) { },
+                "sPaginationType": "full_numbers",
+                "bStateSave": true,
+                "lengthMenu": [[10, 25, 50, 100], [10, 25, 50, 100]],
+                "fnServerParams": function (aoData) {
+                    aoData.push({ "name": "StartDate", "value": "" + $('#start-date').val() },
+                        { "name": "EndDate", "value": $('#end-date').val() });
+                },
+                "aoColumns": [
+                        {
+                            sTitle: 'Tên sự kiện/ Kế hoạch', mData: 'TenKeHoach', sWidth: '30%',
+                            mRender: function (data, type, full) {
+                                var text = "";
+                                text = "<a href='#' onClick='ViewDetail(" + full.IdKeHoach + ")' data-toggle='modal' data-target='#myModal'><p><span>" + full.TenKeHoach+ " </span> </p> </a>";
+                                return text;
+                            }
+                        },
+                        { sTitle: 'Ngày ', mData: 'TuNgay', sWidth: '10%', className: "dt-center" },
+                        {
+                            sTitle: 'Thời gian', mData: 'Ngay', sWidth: '10%',
+                            mRender: function (data, type, full) {
+                                var text = "";
+                                text = "<a href='#' onClick='ViewDetail(" + full.IdKeHoach + ")' data-toggle='modal' data-target='#myModal'><p><span style='color:red'>(" + full.TuGio.substr(0, 5) + "-" + full.DenGio.substr(0, 5) + " )</span> </p> </a>";
+                                return text;
+                            }
+                        },
+                        { sTitle: 'Địa điểm', mData: 'DiaDiem', sWidth: '10%' },
+                         { sTitle: 'Cán bộ tham gia', mData: 'KhachThamDu', sWidth: '20%' },
+                         {
+                             sTitle: 'Action', mData: 'IdKeHoach', sWidth: '10%', className: "dt-center",
+                             mRender: function (data, type, full) {
+                                 var result = "";
+                                     result += "<a href='/CTCaNhan/Edit?Id=" + full.IdKeHoach + "' class='text-delete'>Sửa</a>  ";
+                                     result += "| <a onclick=deleteData('" + full.IdKeHoach + "')	&lsquo; data-id='" + full.IdKeHoach + "' class='text-delete'>Xóa</a>";
+                                 return result;
+                             }
+                         }
+                ],
+                "order": [[2, "desc"]],
+                "aoColumnDefs": [
+                    { 'bSortable': false, 'aTargets': [1, 2] }
+                ],
+                "language": {
+                    "lengthMenu": "Hiển thị _MENU_ bản ghi",
+                    "info": "Hiển thị _START_ đến _END_ trong _TOTAL_ bản ghi",
+                    "infoEmpty": "Hiển thị 0 từ 0 trong 0 bản ghi",
+                    "searchPlaceholder": "Họ tên, chức vụ, phòng ban",
+                    "search": "Tìm kiếm:",
+                    "paginate": {
+                        "first": "Đầu",
+                        "last": "Cuối",
+                        "next": "Tiếp",
+                        "previous": "Trước"
+                    }
+                }
+            });
+        }
+    });
+    function ViewDetail(id) {
+        $.ajax({
+            type: "POST",
+            url: "/PhongBan/Details/" + id,
+            data: id,
+            success: function (result) {
+
+                $('span#hotencanbo').html(result.HoTen);
+                if (result.NgayConLai <= 0) {
+                    $('.alert-warning').css("display", "none");
+                }
+
+                $('span#chucvu').html(result.ChucVu);
+                $('span#kehoachcongtac').html(result.TenKeHoach);
+                $('span#noidung').html(result.KeHoachCongTac);
+                var date = new Date(parseInt(result.ThoiGian.substr(6)));
+                var formatted = ("0" + date.getDate()).slice(-2) + "-" + ("0" + (date.getMonth() + 1)).slice(-2) + "-" +
+                       date.getFullYear()
+                var denngay = new Date(parseInt(result.DenNgayView.substr(6)));
+                var denngayformatted = ("0" + denngay.getDate()).slice(-2) + "-" + ("0" + (denngay.getMonth() + 1)).slice(-2) + "-" +
+                       denngay.getFullYear()
+                $('span#ngayketthuc').html(denngayformatted);
+                $('span#thoigian').html(formatted);
+                $('span#diadiem').html(result.DiaDiem);
+                $('span#thanhphan').html(result.KhachThamDu);
+                $('span#chutri').html(result.ChuTriModel);
+                $('span#tugio').html(result.TuGio.substr(0, 5));
+                $('span#dengio').html(result.DenGio.substr(0, 5));
+
+            },
+            error: function (err) {
+                alert(err);
+            }
+        })
+    }
+    function deleteData(data_id) {
+        bootbox.confirm("Bạn có muốn xóa kế hoạch này không?", function (result) {
+            if (result) {
+                $.ajax({
+                    type: "POST",
+                    url: "/CTCaNhan/Delete/"+data_id,
+                    data: data_id,
+                    success: function (result) {
+                        $('.bottom-right').notify({
+                            message: { text: 'Xóa công tác thành công!' }
+                        }).show();
+                        $("#list").dataTable().fnReloadAjax();
+                    },
+                    error: function (err) {
+                        alert(err);
+                    }
+                });
+            }
+        });
+    }
+</script>

@@ -1,0 +1,151 @@
+﻿@model LamNghiep.DTO.KeHoachCT
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style>
+    .panel-title a{
+        color:#fff;
+    }
+</style>
+<script src="~/Scripts/jquery-1.10.2.js"></script>
+<script src="~/Content/datetimepicker/jquery.datetimepicker.full.js"></script>
+
+<link href="~/Content/datetimepicker/jquery.datetimepicker.min.css" rel="stylesheet" />
+
+<!--Select option-->
+
+<link href="~/Content/select/bootstrap-select.min.css" rel="stylesheet" />
+
+<!-- Latest compiled and minified JavaScript -->
+<script src="~/Content/select/bootstrap-select.min.js"></script>
+
+<!-- (Optional) Latest compiled and minified JavaScript translation files -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.10.0/js/i18n/defaults-*.min.js"></script>
+
+<!-- Latest compiled and minified CSS -->
+<link href="~/Content/css/stylepage-ct-canhan.css" rel="stylesheet" />
+@Html.AntiForgeryToken()
+<div class="panel panel-green " id="panels">
+    <div class="panel-heading panel-title">
+        <h4>
+            <a href="/PhongBan/Index">Quản lý KHCT cán bộ</a>/
+            Lập KHCT cán bộ  &nbsp;<a href="/PhongBan/Index"><i class="fa fa-level-up"></i></a>
+        </h4>
+
+    </div>
+    <div class="panel-body">
+        @using (Html.BeginForm())
+        {
+            <div class="form-horizontal">
+
+                <hr />
+                @Html.ValidationSummary(true)
+                <div class="form-group has-success">
+                    <div class="col-md-3 control-label">Chọn cán bộ cần lập<span style="color:red">*</span></div>
+                    <div class="col-md-5">
+                        <select class="selectpicker form-control" data-live-search="true" multiple name="User" required>
+                            @foreach (var item in Model.ListPhongBanDistinct)
+                            {
+                                <optgroup label="@item.TenPhongBan">
+                                    @foreach (var itemphongban in Model.ListPhongBan)
+                                    {
+                                        if (itemphongban.MaPhongBan == item.MaPhongBan)
+                                        {
+                                            <option value="@itemphongban.UserName">@itemphongban.HoTen</option>
+                                        }
+                                    }
+                                </optgroup>
+                            }
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group has-success">
+                    <div class="col-md-3 control-label">Tên sự kiện công việc <span style="color:red">*</span></div>
+                    <div class="col-md-5">
+                        @Html.TextBoxFor(model => model.TenKeHoach, new { @class = "form-control", @required = "required" })
+                        @Html.ValidationMessageFor(model => model.TenKeHoach)
+                    </div>
+                </div>
+                <div class="form-group has-success">
+                    <div class="col-md-3 control-label">Thời gian thực hiện<span style="color:red">*</span></div>
+                    <div class="col-md-5">
+                        @Html.TextBoxFor(model => model.TuNgay, new { placeholder ="Từ ngày" ,@class = "input-group date form-control", @required = "required" })
+                        @Html.ValidationMessageFor(model => model.TuNgay)
+                        <hr />
+                        @Html.TextBoxFor(model => model.DenNgay, new {placeholder ="Đến ngày", @class = "input-group date form-control" })
+                        @Html.ValidationMessageFor(model => model.DenNgay)
+                    </div>
+                </div>
+
+                <div class="form-group has-success">
+                    <div class="col-md-3 control-label">Lặp lại hàng tuần</div>
+                    <div class="col-md-5">
+                        @Html.CheckBoxFor(model => model.LapLai)
+                        @Html.ValidationMessageFor(model => model.LapLai)
+                    </div>
+                </div>
+                <div class="form-group has-success">
+                    <div class="col-md-3 control-label">Địa điểm</div>
+                    <div class="col-md-5">
+                        @Html.TextBoxFor(model => model.DiaDiem, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.DiaDiem)
+                    </div>
+                </div>
+                <div class="form-group has-success">
+                    <div class="col-md-3 control-label">Nội dung KHCT<span style="color:red">*</span></div>
+                    <div class="col-md-5">
+                        @Html.TextBoxFor(model => model.KeHoachCongTac, new { @class = "form-control", @required = "required" })
+                        @Html.ValidationMessageFor(model => model.KeHoachCongTac)
+                    </div>
+                </div>
+
+                <div class="form-group has-success">
+                    <div class="col-md-3 control-label">Tham dự</div>
+                    <div class="col-md-5">
+                        @Html.TextBoxFor(model => model.KhachThamDu, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.KhachThamDu)
+                    </div>
+                </div>
+
+                <div class="form-group has-success">
+                    <div class="col-md-3 control-label">Mức độ</div>
+                    <div class="col-md-6">
+
+                        @Html.RadioButtonFor(model => model.MucDo, "1") <span style="color:red;">Rất quan trọng (SMS)</span>
+                        @Html.RadioButtonFor(model => model.MucDo, "2")Quan trọng (Popup)
+
+                        @Html.RadioButtonFor(model => model.MucDo, "3",new { @checked = "checked"})Bình thường
+               
+                    </div>
+                </div>
+
+
+
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-10">
+                        <input type="submit" value="Tạo mới" class="btn btn-default" />
+                        <a class="btn btn-default" href="../PhongBan/Index">Hủy bỏ</a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+
+    <div class="panel-footer">
+        <div>
+            <a href="../PhongBan/Index">Trở lại quản lý KHCT cán bộ</a>
+</div>
+    </div>
+</div>
+<script type="text/javascript">
+    $.datetimepicker.setLocale('vi');
+    $('#TuNgay').datetimepicker({
+
+    });
+    $('#DenNgay').datetimepicker({
+
+    });
+
+</script>

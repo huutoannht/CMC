@@ -1,0 +1,125 @@
+﻿@model IEnumerable<LamNghiep.DTO.KeHoachCT>
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@{
+    Layout = null;
+}
+<link href="~/Content/css/stylepage-ct-canhan.css" rel="stylesheet" />
+
+<style>
+
+    span.dtr-data {
+        white-space: pre-wrap;
+    }
+</style>
+
+
+<div class="row">
+    <div class="col-xs-12 col-md-12">
+        <div class="panel panel-default">
+           
+            <div class="panel-body">
+                <form>
+                    <div class="form-horizontal">
+                        <div class="form-group has-success">
+
+                            <div class="col-md-2">
+                                <input type="text" class="form-control" placeholder="Ngày bắt đầu" />
+                            </div>
+                            <div class="col-md-2">
+                                <input type="text" class="form-control" placeholder="Ngày kết thúc" />
+                            </div>
+                            <div class="col-md-2">
+                                <input type="submit" value="Tìm kiếm" class="btn btn-default" />
+                            </div>
+
+                        </div>
+                    </div>
+                </form>
+            
+
+                <table id="list" class="display responsive nowrap" cellspacing="0" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th>Tên phòng</th>
+                            <th>Ngày</th>
+                            <th>Thời gian</th>
+                            <th>Trạng thái </th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td colspan="4" class="dataTables_empty">Loading data from server</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script>
+
+    $(document).ready(function () {
+        $(".khctlddv-table").DataTable();
+        loadData();
+        function loadData() {
+            listTable = $("#list").dataTable({
+                "bProcessing": true,
+                "bServerSide": true,
+                "scrollX": false,
+                "autoWidth": true,
+                "sAjaxSource": '@Url.Action("GetDatPhongByUserJson", "PhongHop")',
+                "fnDrawCallback": function (oSettings) { },
+                "sPaginationType": "full_numbers",
+                "bStateSave": true,
+                "lengthMenu": [[10, 25, 50, 100], [10, 25, 50, 100]],
+                "aoColumns": [
+                        { sTitle: 'Tên phòng', mData: 'TenPhong', sWidth: '20%' },
+                         {
+                             sTitle: 'Đặt vào ngày', mData: 'Ngay', sWidth: '10%',
+                             mRender: function (data, type, full) {
+                                 var date = new Date(parseInt(full.Ngay.substr(6)));
+                                 var formatted = ("0" + date.getDate()).slice(-2) + "-" + ("0" + (date.getMonth() + 1)).slice(-2) + "-" +
+                                        date.getFullYear()
+                                 return formatted;
+                             }
+                         },
+                        { sTitle: 'Thời gian', mData: 'TuGio', sWidth: '10%' },
+                         {
+                             sTitle: 'Trạng thái', mData: 'TrangThai', sWidth: '10%',
+                             mRender: function (data, type, full) {
+                                 var result = "";
+                                 if (full.TrangThai=="1") {
+                                     result = "Đã đặt";
+                                 }
+                                 else {
+                                     result = "Đã hủy";
+                                 }
+                                 return result;
+                             }
+                         },
+                          {
+                              sTitle: 'Hành động', mData: 'Id', sWidth: '10%', className: "dt-center",
+                              mRender: function (data, type, full) {
+                                  var result = "";
+                                  result += "<a onclick=HuyDatPhong('" + full.Id + "')	&lsquo; data-id='" + full.Id + "' class='text-delete'>Hủy đặt phòng</a>";
+                                  return result;
+                              }
+                          }
+                ],
+                "order": [[2, "desc"]],
+                "aoColumnDefs": [
+                    { 'bSortable': false, 'aTargets': [1, 2] }
+                ],
+                "language": {
+                    "searchPlaceholder": "Quick search"
+                }
+            });
+        }
+    });
+</script>

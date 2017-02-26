@@ -1,0 +1,109 @@
+﻿@model IList<LamNghiep.DTO.KeHoachCT>
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Master.cshtml";
+}
+<script src="~/Content/assets/js/jquery-1.11.3.min.js"></script>
+@*SELECT*@
+<script src="~/Content/select/select2.js"></script>
+<link href="~/Content/select/select2.min.css" rel="stylesheet" />
+<link href="~/Content/DataTables/css/jquery.dataTables.css" rel="stylesheet" />
+<link href="~/Content/dataTables.bootstrap.min.css" rel="stylesheet" />
+@*DATATABLE*@
+@*<script src="~/Scripts/jquery.dataTables.js"></script>
+<script src="~/Content/js/dataTables.bootstrap.min.js"></script>
+<script src="~/Content/js/dataTables.responsive.min.js"></script>*@
+
+
+<div class="row">
+    <div class="col-xs-12">
+        <!-- PAGE CONTENT BEGINS -->
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="form-group">
+                    <form action="/LichTuan/InsertLichCaNhan" method="post" id="frmCreate">
+                        <div class="form-group row">
+                            <div class="col-md-2 ">
+                                <button class="btn btn-default" id="btnTuanTruoc">Tuần trước</button>
+                            </div>
+                            <div class="col-md-4">
+                                @Html.DropDownList("Month", null, new { @class = "month form-control" })
+                            </div>
+                            <div class="col-md-2 ">
+                                <button class="btn btn-default" id="btnTuanSau">Tuần sau</button>
+                            </div>
+                            <div class="col-md-4 ">
+                            </div>
+                        </div>
+                        <table id="table-lich-canhan" class="table  table-bordered table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Nội dung</th>
+                                    <th>Chỉ đạo</th>
+                                    <th>Hạn hoàn thành</th>
+                                    <th>Địa điểm</th>
+                                    <th>Hành động</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </form>
+                </div>
+            </div><!-- /.span -->
+            <div class="col-md-12">
+
+            </div>
+        </div><!-- /.row -->
+
+        <div class="hr hr-18 dotted hr-double"></div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        loadData();
+        function loadData() {
+            listTable = $("#table-lich-canhan").dataTable({
+                dom: 'Bfrtip',
+                "bProcessing": true,
+                "bServerSide": true,
+                "scrollX": false,
+                "autoWidth": true,
+                "sAjaxSource": '@Url.Action("GetJson", "LichTuan")',
+                "fnDrawCallback": function (oSettings) { },
+                "sPaginationType": "full_numbers",
+                "bStateSave": true,
+                "lengthMenu": [[10, 25, 50, 100], [10, 25, 50, 100]],
+                "fnServerParams": function (aoData) {
+                    aoData.push({ "name": "TuanLe", "value": $('.tuanle').val() });
+                },
+                "aoColumns": [
+                         { sTitle: 'Nội dung', mData: 'TenKeHoach', sWidth: '10%' },
+                            { sTitle: 'Chỉ đạo', mData: 'ChuTriModel', sWidth: '10%' },
+                          { sTitle: 'Hạn hoàn thành', mData: 'DenNgay', sWidth: '10%' },
+                          { sTitle: 'Địa điểm', mData: 'DiaDiem', sWidth: '10%' },
+                             {
+                                 sTitle: 'Hành động', mData: 'Id', sWidth: '10%', className: "dt-center",
+                                 mRender: function (data, type, full) {
+                                     var result = "";
+                                     result += "<a  href='/LichTuan/Edit/" + full.IdKeHoach + "' class='text-delete'>Chỉnh sửa</a>";
+                                     return result;
+                                 }
+                             }
+                ],
+                "order": [[0, "desc"]],
+                "aoColumnDefs": [
+                    { 'bSortable': false, 'aTargets': [0, 1, 2, 3] }
+                ],
+                "language": {
+                    "searchPlaceholder": "Tên công việc hoặc địa điểm",
+                    "search": "Tìm kiếm:",
+                    "processing": "Đang tải...",
+                }
+            });
+        }
+    })
+    function EditLichCongTac(id){
+
+}
+</script>

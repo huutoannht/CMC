@@ -1,0 +1,428 @@
+﻿@model IEnumerable<LamNghiep.DTO.KeHoachCongTacModel>
+@{
+    Layout = null;
+}
+
+<style>
+    .im-centered {
+        margin: auto;
+        max-width: 300px;
+    }
+
+    .bootstrap-select, .selectpicker {
+        max-width: 150px;
+    }
+
+    .bootstrap-select {
+        width: 300px !important;
+    }
+
+    .img-loading img {
+        height: 80px;
+        width: 80px;
+    }
+
+    .loading {
+        display: none;
+    }
+    .hidden {
+        display: none;
+    }
+</style>
+<!--Select option-->
+<link href="~/Content/select/bootstrap-select.min.css" rel="stylesheet" />
+
+<script src="/Content/select/bootstrap-select.min.js"></script>
+
+
+
+<div class="row" style="text-align:center">
+    <div class="col-md-12">
+        <span style="font-weight: bold; font-size: 18px;">
+            LỊCH LÀM VIỆC 
+        </span>
+    </div>
+</div>
+<div class="row im-centered">
+    <div class="col-md-10">
+        <hr />
+    </div>
+</div>
+<div class="row" style="padding-top:20px;">
+    <div class="col-md-12">
+        <div class="form-horizontal">
+            <div class="form-group row">
+                <div class="col-md-2 control-label">Chọn lãnh đạo :</div>
+                <div class="col-md-2 has-success">
+                    <select class="selectpicker form-control" data-live-search="true" multiple id="lanhDao" name="User" style="width:200px" required>
+                        @foreach (var item in (List<LamNghiep.DTO.PhongBan>)ViewBag.LanhDao)
+                        {
+                            <option value="@item.UserName">@item.HoTen</option>
+                        }
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    @Html.DropDownList("TuanLe", null, new { @class = "tuanle form-control" })
+                </div>
+                <div class="col-md-3">
+                    <input class="form-control" name="search" id="search" placeholder="Tên cán bộ hoặc công việc" />
+                </div>
+                <div class="col-md-2">
+                    <input type="button" class="btn btn-default btn-search" value="Tìm kiếm" />
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <strong>
+            <i>
+                Ghi chú : Đơn vị chủ trì chuẩn bị nội dung và mời các đơn vị liên quan
+            </i>
+        </strong>
+    </div>
+</div>
+<div class="row loading im-centered">
+    <div class="col-md-12">
+        <div class="img-loading">
+            <img src="~/Content/images/loading.gif" />
+        </div>
+    </div>
+</div>
+@{
+    LamNghiep.DTO.DayOfWeekModel dayOfWeek = (LamNghiep.DTO.DayOfWeekModel)@ViewBag.DayOfWeekModel;
+}
+<div id="table-content">
+    <ul class="nav nav-tabs">
+        <li class="active"><a data-toggle="tab" href="#monday">Thứ 2 <span class="tab-web"><br /> @dayOfWeek.Monday</span></a></li>
+        <li><a data-toggle="tab" href="#tuesday">Thứ 3 <span class="tab-web"><br /> @dayOfWeek.Tuesday</span></a></li>
+        <li><a data-toggle="tab" href="#wednesday">Thứ 4 <span class="tab-web"><br /> @dayOfWeek.Wednesday</span></a></li>
+        <li><a data-toggle="tab" href="#thursday">Thứ 5 <span class="tab-web"><br /> @dayOfWeek.Thursday</span></a></li>
+        <li><a data-toggle="tab" href="#friday">Thứ 6 <span class="tab-web"><br /> @dayOfWeek.Friday</span></a></li>
+        <li><a data-toggle="tab" href="#saturday">Thứ 7<span class="tab-web"><br /> @dayOfWeek.Saturday</span></a></li>
+        <li><a data-toggle="tab" href="#sunday">Chủ nhật<span class="tab-web"><br /> @dayOfWeek.Sunday</span></a></li>
+    </ul>
+    <style>
+        .wrapword {
+            white-space: -moz-pre-wrap !important; /* Mozilla, since 1999 */
+            white-space: -webkit-pre-wrap; /*Chrome & Safari */
+            white-space: -pre-wrap; /* Opera 4-6 */
+            white-space: -o-pre-wrap; /* Opera 7 */
+            white-space: pre-wrap; /* css-3 */
+            word-wrap: break-word; /* Internet Explorer 5.5+ */
+            word-break: break-all;
+            white-space: normal;
+        }
+    </style>
+    <link href="~/Content/bower_components/bootstrap/style.css" rel="stylesheet" />
+
+    <div class="tab-content">
+        <div id="monday" class="tab-pane fade in active">
+
+            @foreach (var item in Model)
+            {
+                if ("Thứ 2".Equals(item.Ngay))
+                {
+                    <table class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0" width="100%">
+                        <thead>
+                            <tr>
+                                <th>Lãnh đạo</th>
+                                <th>T.gian</th>
+                                <th>Kế hoạch công tác</th>
+                                <th>Tham dự</th>
+                                <th>Địa điểm</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var itemcongtac in item.ListCongTac)
+                            {
+                                <tr>
+                                    <td style="width:200px">
+                                        <strong>@itemcongtac.HoTen</strong>
+                                        <br>
+                                        <i>@itemcongtac.ChucVu</i>
+                                    </td>
+                                    @if (itemcongtac.TuGio != null)
+                                    {
+                                        <td><span class="content-mb">Thời gian:</span>@itemcongtac.TuGio.Substring(0, 5)</td>
+                                    }
+                                    <td class="wrapword"> <span class="content-mb">Nội dung: </span> @itemcongtac.KeHoachCongTac</td>
+                                    <td class="wrapword"><span class="content-mb">Tham dự: </span>@itemcongtac.KhachThamDu</td>
+                                    <td><span class="content-mb">Địa điểm: </span>@itemcongtac.DiaDiem</td>
+
+                                </tr>
+
+                            }
+                        </tbody>
+                    </table>
+                }
+            }
+        </div>
+        <div id="tuesday" class="tab-pane fade">
+            @foreach (var item in Model)
+            {
+                if ("Thứ 3".Equals(item.Ngay))
+                {
+                    <table class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0" width="100%">
+                        <thead>
+                            <tr>
+                                <th>Lãnh đạo</th>
+                                <th>T.gian</th>
+                                <th>Kế hoạch công tác</th>
+                                <th>Tham dự</th>
+                                <th>Địa điểm</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var itemcongtac in item.ListCongTac)
+                            {
+                                <tr>
+                                    <td style="width:200px">
+                                        <strong>@itemcongtac.HoTen</strong>
+                                        <br>
+                                        <i>@itemcongtac.ChucVu</i>
+                                    </td>
+                                    @if (itemcongtac.TuGio != null)
+                                    {
+                                        <td><span class="content-mb">Thời gian:</span>@itemcongtac.TuGio.Substring(0, 5)</td>
+                                    }
+                                    <td class="wrapword"> <span class="content-mb">Nội dung: </span> @itemcongtac.KeHoachCongTac</td>
+                                    <td class="wrapword"><span class="content-mb">Tham dự: </span>@itemcongtac.KhachThamDu</td>
+                                    <td><span class="content-mb">Địa điểm: </span>@itemcongtac.DiaDiem</td>
+
+                                </tr>
+
+                            }
+                        </tbody>
+                    </table>
+                }
+            }
+        </div>
+        <div id="wednesday" class="tab-pane fade">
+            @foreach (var item in Model)
+            {
+                if ("Thứ 4".Equals(item.Ngay))
+                {
+                    <table class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0" width="100%">
+                        <thead>
+                            <tr>
+                                <th>Lãnh đạo</th>
+                                <th>T.gian</th>
+                                <th>Kế hoạch công tác</th>
+                                <th>Tham dự</th>
+                                <th>Địa điểm</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var itemcongtac in item.ListCongTac)
+                            {
+                                <tr>
+                                    <td style="width:200px">
+                                        <strong>@itemcongtac.HoTen</strong>
+                                        <br>
+                                        <i>@itemcongtac.ChucVu</i>
+                                    </td>
+                                    @if (itemcongtac.TuGio != null)
+                                    {
+                                        <td><span class="content-mb">Thời gian:</span>@itemcongtac.TuGio.Substring(0, 5)</td>
+                                    }
+                                    <td class="wrapword"> <span class="content-mb">Nội dung: </span> @itemcongtac.KeHoachCongTac</td>
+                                    <td class="wrapword"><span class="content-mb">Tham dự: </span>@itemcongtac.KhachThamDu</td>
+                                    <td><span class="content-mb">Địa điểm: </span>@itemcongtac.DiaDiem</td>
+
+                                </tr>
+
+                            }
+                        </tbody>
+                    </table>
+                }
+            }
+        </div>
+        <div id="thursday" class="tab-pane fade">
+            @foreach (var item in Model)
+            {
+                if ("Thứ 5".Equals(item.Ngay))
+                {
+                    <table class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0" width="100%">
+                        <thead>
+                            <tr>
+                                <th>Lãnh đạo</th>
+                                <th>T.gian</th>
+                                <th>Kế hoạch công tác</th>
+                                <th>Tham dự</th>
+                                <th>Địa điểm</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var itemcongtac in item.ListCongTac)
+                            {
+                                <tr>
+                                    <td style="width:200px">
+                                        <strong>@itemcongtac.HoTen</strong>
+                                        <br>
+                                        <i>@itemcongtac.ChucVu</i>
+                                    </td>
+                                    @if (itemcongtac.TuGio != null)
+                                    {
+                                        <td><span class="content-mb">Thời gian:<i class="fa fa-clock-o" aria-hidden="true"></i></span>@itemcongtac.TuGio.Substring(0, 5)</td>
+                                    }
+                                    <td class="wrapword"> <span class="content-mb">Nội dung: </span> @itemcongtac.KeHoachCongTac</td>
+                                    <td class="wrapword"><span class="content-mb">Tham dự: </span>@itemcongtac.KhachThamDu</td>
+                                    <td><span class="content-mb">Địa điểm: </span>@itemcongtac.DiaDiem</td>
+                                </tr>
+
+                            }
+                        </tbody>
+                    </table>
+                }
+            }
+        </div>
+        <div id="friday" class="tab-pane fade">
+            @foreach (var item in Model)
+            {
+                if ("Thứ 6".Equals(item.Ngay))
+                {
+                    <table class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0" width="100%">
+                        <thead>
+                            <tr>
+                                <th>Lãnh đạo</th>
+                                <th>T.gian</th>
+                                <th>Kế hoạch công tác</th>
+                                <th>Tham dự</th>
+                                <th>Địa điểm</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var itemcongtac in item.ListCongTac)
+                            {
+                                <tr>
+                                    <td style="width:200px">
+                                        <strong>@itemcongtac.HoTen</strong>
+                                        <br>
+                                        <i>@itemcongtac.ChucVu</i>
+                                    </td>
+                                    @if (itemcongtac.TuGio != null)
+                                    {
+                                        <td><span class="content-mb">Thời gian:<i class="fa fa-clock-o" aria-hidden="true"></i></span>@itemcongtac.TuGio.Substring(0, 5)</td>
+                                    }
+                                    <td class="wrapword"> <span class="content-mb">Nội dung: </span> @itemcongtac.KeHoachCongTac</td>
+                                    <td class="wrapword"><span class="content-mb">Tham dự: </span>@itemcongtac.KhachThamDu</td>
+                                    <td><span class="content-mb">Địa điểm: </span>@itemcongtac.DiaDiem</td>
+                                </tr>
+
+                            }
+                        </tbody>
+                    </table>
+                }
+            }
+        </div>
+        <div id="saturday" class="tab-pane fade">
+            @foreach (var item in Model)
+            {
+                if ("Thứ 7".Equals(item.Ngay))
+                {
+                    <table class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0" width="100%">
+                        <thead>
+                            <tr>
+                                <th>Lãnh đạo</th>
+                                <th>T.gian</th>
+                                <th>Kế hoạch công tác</th>
+                                <th>Tham dự</th>
+                                <th>Địa điểm</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var itemcongtac in item.ListCongTac)
+                            {
+                                <tr>
+                                    <td style="width:200px">
+                                        <strong>@itemcongtac.HoTen</strong>
+                                        <br>
+                                        <i>@itemcongtac.ChucVu</i>
+                                    </td>
+                                    @if (itemcongtac.TuGio != null)
+                                    {
+                                        <td><span class="content-mb">Thời gian:<i class="fa fa-clock-o" aria-hidden="true"></i></span>@itemcongtac.TuGio.Substring(0, 5)</td>
+                                    }
+                                    <td class="wrapword"> <span class="content-mb">Nội dung: </span> @itemcongtac.KeHoachCongTac</td>
+                                    <td class="wrapword"><span class="content-mb">Tham dự: </span>@itemcongtac.KhachThamDu</td>
+                                    <td><span class="content-mb">Địa điểm: </span>@itemcongtac.DiaDiem</td>
+                                </tr>
+
+                            }
+                        </tbody>
+                    </table>
+                }
+            }
+        </div>
+        <div id="sunday" class="tab-pane fade">
+            @foreach (var item in Model)
+            {
+                if ("Chủ nhật".Equals(item.Ngay))
+                {
+                    <table class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0" width="100%">
+                        <thead>
+                            <tr>
+                                <th>Lãnh đạo</th>
+                                <th>T.gian</th>
+                                <th>Kế hoạch công tác</th>
+                                <th>Tham dự</th>
+                                <th>Địa điểm</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var itemcongtac in item.ListCongTac)
+                            {
+                                <tr>
+                                    <td style="width:200px">
+                                        <strong>@itemcongtac.HoTen</strong>
+                                        <br>
+                                        <i>@itemcongtac.ChucVu</i>
+                                    </td>
+                                    @if (itemcongtac.TuGio != null)
+                                    {
+                                        <td><span class="content-mb">Thời gian:<i class="fa fa-clock-o" aria-hidden="true"></i></span>@itemcongtac.TuGio.Substring(0, 5)</td>
+                                    }
+                                    <td class="wrapword"> <span class="content-mb">Nội dung: </span> @itemcongtac.KeHoachCongTac</td>
+                                    <td class="wrapword"><span class="content-mb">Tham dự: </span>@itemcongtac.KhachThamDu</td>
+                                    <td><span class="content-mb">Địa điểm: </span>@itemcongtac.DiaDiem</td>
+
+                                </tr>
+
+                            }
+                        </tbody>
+                    </table>
+                }
+            }
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+
+        $('.btn-search').click(function () {
+            $('#table-content').hide();
+            $('.loading').show();
+            var user_data = $('.selectpicker').val();
+            var tuanLe_data = $('.tuanle').val();
+            var search_data = $('#search').val();
+            $.ajax({
+                type: 'GET',
+                url: '@Url.Action("Search", "KeHoachCT")',
+                data: { lanhDao: $('#lanhDao').val(), tuanle: tuanLe_data, search: search_data },
+                cache: false,
+                traditional: true,
+                success: function (result) {
+                    $('.loading').hide();
+                    $('#table-content').html(result);
+                    $('#table-content').fadeIn();
+                },
+                error: function (err) {
+                    alert(err);
+                }
+            });
+        })
+    });
+</script>

@@ -1,0 +1,393 @@
+﻿@model LamNghiep.DTO.KeHoachCT
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<link href="~/Content/css/stylepage-ct-canhan.css" rel="stylesheet" />
+<!--Select option-->
+<link href="~/Content/select/bootstrap-select.min.css" rel="stylesheet" />
+
+
+<style>
+
+    span.dtr-data {
+        white-space: pre-wrap;
+    }
+
+    table td p {
+        border-top: 1px solid #ccc;
+    }
+
+    .modal-body .row {
+        padding: 5px 10px;
+    }
+
+    .btn-group {
+        width: 250px !important;
+    }
+
+    .dataTables_length, .dataTables_info, .dataTables_paginate {
+        display: none;
+    }
+
+    table td a {
+    }
+
+    table.dataTable.dtr-inline.collapsed > tbody > tr > td:first-child:before, table.dataTable.dtr-inline.collapsed > tbody > tr > th:first-child:before {
+        display: none;
+    }
+
+    table.dataTable tbody th, table.dataTable tbody td {
+        padding: 0 !important;
+    }
+
+    span.modal-content-span {
+        font-weight: bold;
+    }
+
+   
+</style>
+
+
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Kế hoạch công tác</h4>
+            </div>
+            <div class="modal-body">
+                <div class="alert alert-warning alert-datphong-cs">
+                    Còn <span id="ngayconlai"></span> ngày nữa
+                </div>
+                <div class="row">
+                    <div class="col-xs-3 col-md-3 control-label">Họ tên cán bộ :</div>
+                    <div class="col-xs-4 col-md-4">
+                        <span class="modal-content-span" id="hotencanbo"></span>
+                    </div>
+                    <div class="col-xs-5 col-md-5">
+                        <span class=""> Chức vụ: </span><span class="" id="chucvu"></span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-3 col-md-3 control-label"> Chủ trì :</div>
+                    <div class="col-xs-8 col-md-8 control-label">
+                        <span class="modal-content-span" id="chutri"></span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-4 col-md-4 control-label"> Kế hoạch công tác :</div>
+                    <div class="col-xs-8 col-md-8 control-label">
+                        <span class="modal-content-span" id="kehoachcongtac"></span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-3 col-md-3 control-label">Ngày bắt đầu :</div>
+                    <div class="col-xs-4  col-md-4 control-label">
+                        <span class="modal-content-span" id="thoigian"></span>
+                    </div>
+                    <div class="col-xs-2 col-md-2 control-label">
+                        <span>Từ giờ <i class="fa fa-clock-o" aria-hidden="true"></i></span>
+                        <span class="modal-content-span" id="tugio"></span>
+                    </div>
+                    <div class="col-xs-2  col-md-2 control-label">
+                        <span>Đến giờ <i class="fa fa-clock-o" aria-hidden="true"></i></span>
+                        <span class="modal-content-span" id="dengio"></span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-3 col-md-3 control-label">Ngày kết thúc :</div>
+                    <div class="col-xs-8  col-md-8 control-label">
+                        <span class="modal-content-span" id="ngayketthuc"></span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-3 col-md-3 control-label">Địa điểm :</div>
+                    <div class="col-xs-8  col-md-8 control-label">
+                        <span class="modal-content-span" id="diadiem"></span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-3 col-md-3 control-label">Tham dự : </div>
+                    <div class="col-xs-8 col-md-8 control-label">
+                        <span class="modal-content-span" id="thanhphan"></span>
+                    </div>
+                </div>
+                <div class="row" style="border:none;">
+                    <div class="col-xs-3 col-md-3 control-label">Nội dung:</div>
+                    <div class="col-xs-8  col-md-8 control-label">
+                        <span class="modal-content-span" id="noidung"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Đóng </button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="panel with-nav-tabs panel-success">
+    <div class="panel-heading">
+        <ul class="nav nav-tabs">
+            <li class="active"><a href="#tab1success" data-toggle="tab"><i class="fa fa-home fa-3x" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;Bảng lịch công tác&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a></li>
+            <li><a href="#tab2success" data-toggle="tab"><i class="fa fa-calendar fa-3x" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;Xem lịch công tác&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a></li>
+        </ul>
+    </div>
+    <div class="panel-body">
+        <div class="tab-content">
+            <div class="tab-pane fade active in" id="tab1success">
+                <div class="row">
+                    <div class="col-xs-12 col-md-12">
+                        <div class="panel panel-default">
+                            <div class="panel-heading" style="text-align:center;">
+                                <span style="font-size:20px;"> Xem lịch công tác phòng ban</span>
+                                
+                                    <div class="form-horizontal">
+                                        <hr />
+                                        @Html.ValidationSummary(true)
+                                        <div class="form-group has-success row">
+                                            <div class="col-md-2 control-label">Chọn phòng ban :</div>
+                                            <div class="col-md-3 has-success">
+                                                <select class="selectpicker form-control" data-live-search="true" multiple name="User" style="width:300px" >
+                                                    @foreach (var item in Model.ListPhongBanDistinct)
+                                                    {
+                                                        <optgroup label="@item.TenPhongBan">
+                                                            @foreach (var itemphongban in Model.ListPhongBan)
+                                                            {
+                                                                if (itemphongban.MaPhongBan == item.MaPhongBan)
+                                                                {
+                                                                    <option value="@itemphongban.UserName">@itemphongban.HoTen</option>
+                                                                }
+                                                            }
+                                                        </optgroup>
+                                                    }
+                                                </select>
+                                            </div>
+                                            <div class="col-md-2 ">
+                                                <button class="btn btn-default" id="btnTuanTruoc">Tuần trước</button>
+                                            </div>
+                                            <div class="col-md-3">
+                                                @Html.DropDownList("TuanLe", null, new { @class = "tuanle form-control" })
+                                            </div>
+                                            <div class="col-md-2 ">
+                                                <button class="btn btn-default" id="btnTuanSau">Tuần sau</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                               
+                            </div>
+                            <div class="panel-body">
+
+
+                                <table id="list" class="display responsive nowrap" cellspacing="0" style="width:100%">
+                                    <thead>
+                                        <tr>
+                                            <th>Tên sự kiện</th>
+                                            <th>Ngày</th>
+                                            <th>Cán bộ</th>
+                                            <th>Thời gian</th>
+                                            <th>Tham dự</th>
+
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td colspan="4" class="dataTables_empty">Loading data from server</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-pane fade" id="tab2success">
+                @{Html.RenderAction("LichCongTac", "KeHoachCT");}
+
+            </div>
+        </div>
+    </div>
+    <div class="panel-footer">
+        &copy;Lâm nghiệp việt nam @DateTime.Now.Year
+        <span style="float:right">Hôm nay @DateTime.Today.ToString("dd/MM/yyyy")</span>
+    </div>
+</div>
+<script src="~/Scripts/fnReloadAjax.js"></script>
+<script>
+
+    $(document).ready(function () {
+        loadData();
+        function loadData() {
+            listTable = $("#list").dataTable({
+                dom: 'Bfrtip',
+                buttons: [
+                    'copy', 'csv', 'excel', 'pdf', 'print'
+                ],
+                "bProcessing": true,
+                "bServerSide": true,
+                "scrollX": false,
+                "autoWidth": true,
+                "sAjaxSource": '@Url.Action("GetJson", "PhongBan")',
+                "fnDrawCallback": function (oSettings) { },
+                "sPaginationType": "full_numbers",
+                "bStateSave": true,
+                "lengthMenu": [[10, 25, 50, 100], [10, 25, 50, 100]],
+                "fnServerParams": function (aoData) {
+                    aoData.push({ "name": "CanBo", "value": "" + $('.selectpicker').val() },
+                        { "name": "TuanLe", "value": $('.tuanle').val() });
+                },
+                "aoColumns": [
+                        { sTitle: 'Ngày', mData: 'Ngay', sWidth: '5%' },
+                         {
+                             sTitle: 'Cán bộ', mData: 'Ngay', sWidth: '25%',
+                             mRender: function (data, type, full) {
+                                 var text = "";
+                                 for (i = 0; i < full.ListCongTac.length; i++) {
+                                     if (full.ListCongTac[i].HoTen != "") {
+                                         text += "<a style='line-height: " + full.ListCongTac[i].LineHeight + "px' href='#' ><p><b>"
+                                         + full.ListCongTac[i].HoTen + " </b> "
+                                         if (full.ListCongTac[i].VietTat != null) {
+                                             text += '<span  style="font-size:11px;">(' + full.ListCongTac[i].ChucVu + ')</span>';
+                                         }
+                                         text += " </p> </a>"
+                                     }
+                                 }
+                                 return text;
+                             }
+                         },
+                         {
+                             sTitle: 'Thời gian', mData: 'Ngay', sWidth: '10%',
+                             mRender: function (data, type, full) {
+                                 var text = "";
+                                 for (i = 0; i < full.ListCongTac.length; i++) {
+                                     text += "<a style='line-height:24px' href='#' onClick='ViewDetail(" + full.ListCongTac[i].IdKeHoach + ")' data-toggle='modal' data-target='#myModal'><p><span style='color:red'>";
+                                     if (full.ListCongTac[i].CaNgay == 1) {
+                                         text += " Cả ngày "
+                                     } else {
+                                         if (full.ListCongTac[i].TuGio != null) {
+                                             text += full.ListCongTac[i].TuGio.substr(0, 5)
+                                         }
+                                         if (full.ListCongTac[i].DenGio != null) {
+                                             text += " - " + full.ListCongTac[i].DenGio.substr(0, 5) + ""
+                                         }
+                                     }
+                                     text += " </span> </p> </a>";
+                                 }
+                                 return text;
+                             }
+                         },
+                          {
+                              sTitle: 'Công việc', mData: 'Ngay', sWidth: '40%',
+                              mRender: function (data, type, full) {
+                                  var text = "";
+                                  for (i = 0; i < full.ListCongTac.length; i++) {
+                                      text += "<a style='line-height:24px' href='#' onClick='ViewDetail(" + full.ListCongTac[i].IdKeHoach + ")' data-toggle='modal' data-target='#myModal'><p  style='line-height:24px'>" + full.ListCongTac[i].TenKeHoach.substr(0, 50); +  " </p>  ";
+                                  }
+                                  return text;
+                              }
+                          }
+                          ,
+                          {
+                              sTitle: 'Địa điểm', mData: 'DiaDiem', sWidth: '20%',
+                              mRender: function (data, type, full) {
+                                  var text = "";
+                                  for (i = 0; i < full.ListCongTac.length; i++) {
+                                      text += "<p style='line-height:24px'>" + full.ListCongTac[i].DiaDiem + " </p>  ";
+                                  }
+                                  return text;
+                              }
+                          }
+                          //,
+                          //{
+                          //    sTitle: 'Tham dự', mData: 'Ngay', sWidth: '20%',
+                          //    mRender: function (data, type, full) {
+                          //        var text = "";
+                          //        for (i = 0; i < full.ListCongTac.length; i++) {
+                          //            text += " <p>Lãnh đạo:<b>" + full.ListCongTac[i].HoTen + " </b><span style='color:red'>(" + full.ListCongTac[i].TuGio + " )</span>" +
+                          //                " Tham dự: "; if (full.ListCongTac[i] != null) {
+                          //                    full.ListCongTac[i].KhachThamDu
+                          //                } " </p>  ";
+                          //        }
+                          //        return text;
+                          //    }
+                          //}
+
+                ],
+                "order": [[0, "desc"]],
+                "aoColumnDefs": [
+                    { 'bSortable': false, 'aTargets': [0, 1, 2, 3, 4] }
+                ],
+                "language": {
+                    "searchPlaceholder": "Tên công việc hoặc địa điểm",
+                    "search": "Tìm kiếm:",
+                }
+            });
+        }
+        $('button.fc-today-button').click();
+    });
+
+
+    function ViewDetail(id) {
+        $.ajax({
+            type: "POST",
+            url: "/PhongBan/Details/" + id,
+            data: id,
+            success: function (result) {
+
+                $('span#hotencanbo').html(result.HoTen);
+                if (result.NgayConLai <= 0) {
+                    $('.alert-warning').css("display", "none");
+                }
+
+                $('span#chucvu').html(result.ChucVu);
+                $('span#kehoachcongtac').html(result.TenKeHoach);
+                $('span#noidung').html(result.KeHoachCongTac);
+                var date = new Date(parseInt(result.ThoiGian.substr(6)));
+                var formatted = ("0" + date.getDate()).slice(-2) + "-" + ("0" + (date.getMonth() + 1)).slice(-2) + "-" +
+                       date.getFullYear()
+                var denngay = new Date(parseInt(result.DenNgayView.substr(6)));
+                var denngayformatted = ("0" + denngay.getDate()).slice(-2) + "-" + ("0" + (denngay.getMonth() + 1)).slice(-2) + "-" +
+                       denngay.getFullYear()
+                $('span#ngayketthuc').html(denngayformatted);
+                $('span#thoigian').html(formatted);
+                $('span#diadiem').html(result.DiaDiem);
+                $('span#thanhphan').html(result.KhachThamDu);
+                $('span#chutri').html(result.ChuTriModel);
+                $('span#tugio').html(result.TuGio.substr(0, 5));
+                $('span#dengio').html(result.DenGio.substr(0, 5));
+
+            },
+            error: function (err) {
+                alert(err);
+            }
+        })
+    }
+    $('.selectpicker').change(function () {
+        $("#list").dataTable().fnReloadAjax();
+    })
+    $('.tuanle').change(function () {
+        $("#list").dataTable().fnReloadAjax();
+    })
+    $('#btnTuanTruoc').click(function () {
+        $('#TuanLe').val(Number($('#TuanLe').val()) - Number(1));
+        $("#TuanLe > option:selected")
+          .prop("selected", false)
+          .before()
+          .prop("selected", true);
+        $("#list").dataTable().fnReloadAjax();
+    })
+    $('#btnTuanSau').click(function () {
+        $('#TuanLe').val(Number($('#TuanLe').val()) + Number(1));
+        $("#TuanLe > option:selected")
+         .prop("selected", false)
+         .next()
+         .prop("selected", true);
+        $("#list").dataTable().fnReloadAjax();
+    })
+</script>
+
+
+<!-- Latest compiled and minified JavaScript -->
+<script src="~/Content/select/bootstrap-select.min.js"></script>

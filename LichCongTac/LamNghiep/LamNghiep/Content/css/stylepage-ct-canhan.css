@@ -1,0 +1,15 @@
+﻿
+table th {
+    background-color: #06914d;
+    color: white;
+}
+span.title-panel a{
+    color:#fff;
+}
+a.btn{
+    color:#333;
+}
+#myModal .modal-dialog .row, #ChiTietKeHoach .modal-dialog .row{
+    padding:5px 10px;
+    border-bottom:solid 1px #ccc;
+}

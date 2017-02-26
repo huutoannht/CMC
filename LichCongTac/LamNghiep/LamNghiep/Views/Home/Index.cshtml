@@ -1,0 +1,66 @@
+﻿<div class="panel with-nav-tabs panel-success">
+    <div class="panel-heading  panel-heading-index">
+        <ul class="nav nav-tabs">
+            <li class="active"><a href="#tab1success" data-toggle="tab"><i class="fa fa-home fa-3x" aria-hidden="true"></i> <span class="tab-web"> &nbsp;&nbsp;&nbsp;  Trang cá nhân </span></a></li>
+            <li class=""><a href="#tab2success" data-toggle="tab"><i class="fa fa-calendar fa-3x" aria-hidden="true"></i><span class="tab-web">&nbsp;&nbsp;&nbsp; Kế hoạch công tác</span></a></li>
+            <li class=""><a href="#tab3success" data-toggle="tab"><i class="fa fa-bell fa-3x" aria-hidden="true"></i><span class="tab-web">&nbsp;&nbsp;&nbsp;Tin tức thông tin</span></a></li>
+
+        </ul>
+    </div>
+    <div class="panel-body">
+        <div class="tab-content">
+            <div class="tab-pane fade active in" id="tab1success">
+                <div class="container">
+
+                    <div class="row">
+                        <div class="col-xs-12 col-md-5">
+                            <div class="panel panel-green">
+                                <div class="panel-heading">
+                                    <i class="fa fa-envelope-o" aria-hidden="true"></i> Lịch công tác
+                                </div>
+                                <div class="panel-body">
+                                    <ul>
+                                        <li><a href="/CTCaNhan">Xem lịch cá nhân</a></li>
+                                    </ul>
+                                    <ul>
+                                        <li><a href="/CTCaNhan/MyCalendar">Chỉnh sửa lịch cá nhân</a></li>
+                                    </ul>
+                                    <ul>
+                                        <li><a href="/CTCaNhan/Create">Thêm lịch công tác cá nhân</a></li>
+                                    </ul>
+                                    <ul>
+                                        <li><a href="/PhongBan">Xem lịch chung</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-md-5">
+                            @{Html.RenderAction("ViewThamDuChuTri", "CTCaNhan");}
+                        </div>
+                    </div>
+
+
+                    <div class="row">
+
+                        <div class="col-xs-12 col-md-5">
+                            @{Html.RenderAction("ViewTuanNay", "CTCaNhan");}
+                          
+                        </div>
+                        <div class="col-xs-12 col-md-5">
+                            @{Html.RenderAction("ViewTuanToi", "CTCaNhan");}
+                           
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-pane fade" id="tab2success">@{Html.RenderAction("Index", "KeHoachCT");}</div>
+
+            <div class="tab-pane fade" id="tab3success">Success 3</div>
+
+        </div>
+    </div>
+    <div class="panel-footer footer">
+        &copy;Lâm nghiệp việt nam @DateTime.Now.Year
+        <span style="float:right">Hôm nay @DateTime.Today.ToString("dd/MM/yyyy")</span>
+    </div>
+</div>

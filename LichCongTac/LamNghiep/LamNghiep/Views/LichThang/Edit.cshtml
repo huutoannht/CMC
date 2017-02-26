@@ -1,0 +1,216 @@
+﻿@model LamNghiep.DTO.KeHoachCT
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Master.cshtml";
+}
+
+<script src="~/Content/datetimepicker/jquery.datetimepicker.full.js"></script>
+
+<link href="~/Content/datetimepicker/jquery.datetimepicker.min.css" rel="stylesheet" />
+<!-- Latest compiled and minified CSS -->
+<script src="~/Content/assets/js/jquery-1.11.3.min.js"></script>
+
+
+
+@*Validate*@
+@*<script src="@Url.Content("~/Scripts/jquery.validate.min.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")" type="text/javascript"></script>*@
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('.example-multiple-optgroups').select2({
+            tags: true,
+        });
+        function formatRepo(repo) {
+            if (repo.loading) return repo.text;
+
+            var markup = '<div class="clearfix">' +
+            '<div class="col-sm-1">' +
+            '<img src="' + repo.owner.avatar_url + '" style="max-width: 2%" />' +
+            '</div>' +
+            '<div clas="col-sm-10">' +
+            '<div class="clearfix">' +
+            '<div class="col-sm-6">' + repo.full_name + '</div>' +
+            '<div class="col-sm-3"><i class="fa fa-code-fork"></i> ' + repo.forks_count + '</div>' +
+            '<div class="col-sm-2"><i class="fa fa-star"></i> ' + repo.stargazers_count + '</div>' +
+            '</div>';
+
+            if (repo.description) {
+                markup += '<div>' + repo.description + '</div>';
+            }
+            markup += '</div></div>';
+            return markup;
+        }
+
+        function formatRepoSelection(repo) {
+            return repo.full_name || repo.text;
+        }
+        
+    })
+
+</script>
+<style>
+    label.checkbox {
+        color: #000 !important;
+    }
+
+    .field-validation-error {
+        color: red;
+        font-size: 0.750em;
+    }
+</style>
+
+<div class="panel panel-green" id="panels">
+    <div class="panel-heading">
+        <h4><span class="title-panel"> @Html.ActionLink("Danh sách công tác", "Index")/ Chỉnh sửa lịch công tác</span> <a href="/CTCaNhan/Index" style="color:#fff"><i class="fa fa-level-up" aria-hidden="true"></i></a></h4>
+    </div>
+    <div class="panel-body">
+        @using (Html.BeginForm())
+        {
+            <div class="form-horizontal">
+                <hr />
+                @Html.ValidationSummary(true)
+
+                <div class="form-group">
+                    <div class="col-md-3 control-label">Tên sự kiện công việc<span style="color:red">*</span></div>
+                    <div class="col-md-6">
+                        @Html.TextBoxFor(model => model.TenKeHoach, new { @class = "form-control", @required = "required", @autofocus = "autofocus" })
+                        @Html.ValidationMessageFor(model => model.TenKeHoach)
+                        @Html.HiddenFor(model => model.IdKeHoach)
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-md-3 control-label">Thời gian thực hiện<span style="color:red">*</span></div>
+                    <div class="col-md-3">
+                        @Html.TextBoxFor(model => model.TuNgay, new { placeholder = "Từ ngày", @class = "input-group date form-control date-picker", @required = "required", @style = "float:left" })
+                        @Html.ValidationMessageFor(model => model.TuNgay)
+                    </div>
+                    <div class="col-md-3 ">
+                        @Html.TextBoxFor(model => model.DenNgay, new { placeholder = "Đến ngày", @class = "input-group date form-control date-picker", @style = "float:left" })
+                        @Html.ValidationMessageFor(model => model.DenNgay)
+                    </div>
+
+
+                </div>
+                <div class="form-group row">
+                    <div class="col-md-3  col-md-offset-3">
+                        @Html.TextBoxFor(model => model.TuGio, new { placeholder = "Từ giờ", @class = "input-group date  form-control", @style = "float:left;width:90px;" })
+                    </div>
+                    <div class="col-md-3">
+                        @Html.TextBoxFor(model => model.DenGio, new { placeholder = "Đến giờ", @class = "input-group date form-control ", @style = "float:left;width:90px;" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-3 control-label">Chủ trì</div>
+                    <div class="col-md-6">
+                        <select multiple="multiple" class="form-control example-multiple-optgroups" name="chutri">
+                            @foreach (var item in Model.ListPhongBanDistinct)
+                            {
+                                <optgroup label="@item.TenPhongBan">
+                                    @foreach (var itemphongban in Model.ListPhongBanChuTri)
+                                    {
+                                        if (itemphongban.MaPhongBan == item.MaPhongBan)
+                                        {
+                                            if (itemphongban.Selected == true)
+                                            {
+                                                <option value="@itemphongban.UserName" selected="selected">@itemphongban.HoTen</option>
+                                            }
+                                            else
+                                            {
+                                                <option value="@itemphongban.UserName">@itemphongban.HoTen</option>
+                                            }
+
+                                        }
+                                    }
+                                </optgroup>
+                            }
+                            <optgroup label="Khách mời">
+                                @foreach (var itemChuTri in Model.ListKhachMoiChuTri)
+                                {
+                                    <option value="@itemChuTri.TenKhachMoi" selected="selected">@itemChuTri.TenKhachMoi</option>
+                                }
+                            </optgroup>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group ">
+                    <div class="col-md-3 control-label">Địa điểm</div>
+                    <div class="col-md-6">
+                        @Html.TextBoxFor(model => model.DiaDiem, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.DiaDiem)
+
+                        @*<select id="DiaDiem" style="width:500px"></select>*@
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-3 control-label">Nội dung KHCT<span style="color:red">*</span></div>
+                    <div class="col-md-6">
+                        @Html.TextBoxFor(model => model.KeHoachCongTac, new { @class = "form-control", @required = "required" })
+                        @Html.ValidationMessageFor(model => model.KeHoachCongTac)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-md-3 control-label">Tham dự</div>
+                    <div class="col-md-6">
+                        <select multiple="multiple" class="form-control example-multiple-optgroups" name="thamdu">
+                            @foreach (var item in Model.ListPhongBanDistinct)
+                            {
+                                <optgroup label="@item.TenPhongBan">
+                                    @foreach (var itemphongban in Model.ListPhongBanThamDu)
+                                    {
+                                        if (itemphongban.MaPhongBan == item.MaPhongBan)
+                                        {
+                                            if (itemphongban.Selected == true)
+                                            {
+                                                <option value="@itemphongban.UserName" selected="selected">@itemphongban.HoTen</option>
+                                            }
+                                            else
+                                            {
+                                                <option value="@itemphongban.UserName">@itemphongban.HoTen</option>
+                                            }
+                                        }
+                                    }
+                                </optgroup>
+                            }
+                            <optgroup label="Khách mời">
+                                @foreach (var itemKhachMoi in Model.ListKhachMoiThamDu)
+                                {
+                                    <option value="@itemKhachMoi.TenKhachMoi" selected="selected">@itemKhachMoi.TenKhachMoi</option>
+                                }
+                            </optgroup>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <div class="col-md-offset-4 col-md-10" style="color:#fff!important;">
+                        <input type="submit" value="Cập nhật" class="btn btn-warning" />
+                        <a class="btn btn-success" href="/CTCaNhan/MyCalendar" style="color: rgb(255, 255, 255)!important;">Hủy bỏ</a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+
+    <div class="panel-footer">
+        <div>
+            @Html.ActionLink("Trở lại danh sách CT cá nhân", "Index")
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $.datetimepicker.setLocale('vi');
+    $('.date-picker').datepicker({
+        autoclose: true,
+        todayHighlight: true
+    })
+
+  
+    
+    $(document).ready(function () {
+
+
+    })
+</script>

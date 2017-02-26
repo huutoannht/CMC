@@ -1,0 +1,99 @@
+﻿@model LamNghiep.DTO.KeHoachCT
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<link href="~/Content/css/stylepage-ct-canhan.css" rel="stylesheet" />
+
+<style>
+    table td {
+        white-space: pre-wrap;
+    }
+
+
+    span.dtr-data {
+        white-space: pre-wrap;
+    }
+
+
+
+    .modal-body .row {
+        padding: 5px 10px;
+    }
+
+    .btn-group {
+        width: 250px !important;
+    }
+
+    span.modal-content-span {
+        font-weight: bold;
+    }
+    #hidden-frame {
+        height: 115px;
+        position: fixed;
+        background-color: #fff;
+        line-height: 147px;
+        margin-top: -15px;
+        z-index: 9999;
+        width: 1179px;
+    }
+
+    #title-lichlanhdao {
+        margin-top: -120px;
+        font-weight: lighter;
+        color: #69AA48 !important;
+        font-size: 30px;
+    }
+
+    #tab2success {
+        height: 300px;
+    }
+    #page-wrapper {
+        min-height: 440px!important;
+    }
+</style>
+
+
+<div class="panel with-nav-tabs panel-success">
+    <div class="panel-body">
+        <div class="tab-content">
+            <div class="tab-pane fade active in" id="tab2success">
+                <div id="hidden-frame">
+                    <div class="panel-heading  panel-heading-index">
+                        <ul class="nav nav-tabs">
+                            <li class="active"><a href="#tab2success" data-toggle="tab"><i class="fa fa-calendar fa-3x" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp; Kế hoạch công tác</a></li>
+                        </ul>
+                    </div>
+                    <div id="title-lichlanhdao">Lịch công tác lãnh đạo</div>
+                </div>
+                <div class="embed-responsive embed-responsive-16by9">
+                    <form id="login" target="frame" method="post" action="http://eoffice.vnforest.gov.vn/loginExc.vng">
+                        <input type="hidden" name="account" value="tongcuclamnghiep" />
+                        <input type="hidden" name="password" value="lamnghiep" />
+                    </form>
+                    <iframe id="frame" name="frame"></iframe>
+                    <iframe class="embed-responsive-item" name="framelamnghiep"
+                            id="framelamnghiep" src="http://eoffice.vnforest.gov.vn/wokingschedule/leader_wokingschedules.vng?menu=2"></iframe>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="panel-footer">
+        &copy;Lâm nghiệp việt nam @DateTime.Now.Year
+        <span style="float:right">Hôm nay @DateTime.Today.ToString("dd/MM/yyyy")</span>
+    </div>
+</div>
+<script>
+
+    $(document).ready(function () {
+        $('#login').submit();
+        $(document).ready(function () {
+        });
+        setTimeout(function () {
+            $('#framelamnghiep').attr('src', $('#framelamnghiep').attr('src'));
+        }, 2000);
+    })
+</script>
+
+

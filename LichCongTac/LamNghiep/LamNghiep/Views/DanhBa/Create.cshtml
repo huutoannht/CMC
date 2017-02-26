@@ -1,0 +1,29 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script src="~/Content/SomeNote/summernote.min.js"></script>
+<script src="~/Content/SomeNote/summernote.js"></script>
+<script src="~/Content/SomeNote/lang/summernote-vi-VN.js"></script>
+<link href="~/Content/SomeNote/summernote.css" rel="stylesheet" />
+
+<div class="row">
+    <div class="col-md-12">
+        <form action="/DanhBa/Update" method="POST">
+            <input type="submit" value="Cập nhật" />
+            <textarea id="noidung" name="NoiDung">@ViewBag.NoiDung</textarea>
+            <input type="hidden" value="@ViewBag.Id" name="id" id="Id"/>
+        </form>
+       
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $('#noidung').summernote({
+            lang: 'vi-VN', // default: 'en-US'
+            height: 2000
+        });
+    });
+</script>
+

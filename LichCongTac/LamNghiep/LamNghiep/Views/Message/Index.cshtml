@@ -1,0 +1,75 @@
+﻿@model LamNghiep.DTO.KeHoachCT
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script src="~/Scripts/jquery-1.10.2.js"></script>
+<script src="~/Content/datetimepicker/jquery.datetimepicker.full.js"></script>
+
+<link href="~/Content/datetimepicker/jquery.datetimepicker.min.css" rel="stylesheet" />
+<!-- Latest compiled and minified CSS -->
+<link href="~/Content/css/stylepage-ct-canhan.css" rel="stylesheet" />
+@Html.AntiForgeryToken()
+<div class="panel panel-green" id="panels">
+    <div class="panel-heading">
+        <h4><span class="title-panel">  Tạo thư mới</span> </h4>
+    </div>
+    <div class="panel-body">
+        @using (Html.BeginForm())
+        {
+            <div class="form-horizontal">
+
+                <hr />
+                @Html.ValidationSummary(true)
+
+                <div class="form-group has-success">
+                    <div class="col-md-3 control-label">Người nhận<span style="color:red">*</span></div>
+                    <div class="col-md-8">
+                        @Html.TextBoxFor(model => model.TenKeHoach, new { @class = "form-control", @required = "required" })
+                        @Html.ValidationMessageFor(model => model.TenKeHoach)
+                    </div>
+                </div>
+                <div class="form-group has-success">
+                    <div class="col-md-3 control-label">Chủ đề<span style="color:red">*</span></div>
+                    <div class="col-md-8">
+                        @Html.TextBoxFor(model => model.TuNgay, new { @class = "input-group  form-control", @required = "required" })
+                        @Html.ValidationMessageFor(model => model.TuNgay)
+                    </div>
+                </div>
+                <div class="form-group has-success">
+                    <div class="col-md-3 control-label">Nội dung<span style="color:red">*</span></div>
+                    <div class="col-md-8">
+                        @Html.TextAreaFor(model => model.DiaDiem, new { @class = "form-control", @rows = "5", @col = "40" })
+                        @Html.ValidationMessageFor(model => model.DiaDiem)
+                    </div>
+                </div>
+
+
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-10">
+                        <input type="submit" value="Gửi đi" class="btn btn-default" />
+                        <a class="btn btn-default" href="../Home/Index">Hủy bỏ</a>
+                    </div>
+                </div>
+            </div>
+        }
+
+
+        <div class="panel-footer">
+            <div>
+                @Html.ActionLink("Trang chủ", "../Home/Index")
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $.datetimepicker.setLocale('vi');
+    $('#TuNgay').datetimepicker({
+
+    });
+    $('#DenNgay').datetimepicker({
+
+    });
+
+</script>

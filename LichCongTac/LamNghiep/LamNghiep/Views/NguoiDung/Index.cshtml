@@ -1,0 +1,224 @@
+﻿@model LamNghiep.DTO.User
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<link href="~/Content/css/stylepage-ct-canhan.css" rel="stylesheet" />
+<script src="~/Scripts/bootstrap-notify.js"></script>
+<script src="~/Scripts/jquery.validate.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
+<link href="~/Content/css/bootstrap-notify.css" rel="stylesheet" />
+
+<style>
+    table td {
+        white-space: pre-wrap;
+        
+    }
+
+    span.dtr-data {
+        white-space: pre-wrap;
+    }
+    table.dataTable tbody th, table.dataTable tbody td {
+        padding: 8px !important;
+    }
+     .text-delete {
+        color: red;
+        cursor: pointer;
+    }
+</style>
+<div class='notifications bottom-right'></div>
+
+<div class="modal fade" id="modal-changepass" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            @using (Html.BeginForm(null, null, FormMethod.Post, new { id = "frmRegister" }))
+            {
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title" id="myModalLabel">Thay đổi mật khẩu (<span id="nameuser"></span>)</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-horizontal">
+                        <div class="form-group has-success">
+                            <div class="col-md-4 control-label">Mật khẩu <span style="color:red">*</span></div>
+                            <div class="col-md-6">
+                                @Html.TextBoxFor(model => model.Password, new { @class = "form-control", @required = "required", @type = "password" })
+                                @Html.ValidationMessageFor(model => model.Password)
+                                @Html.HiddenFor(model => model.UserName)
+                            </div>
+                        </div>
+                        <div class="form-group has-success">
+                            <div class="col-md-4 control-label">Nhập lại mật khẩu <span style="color:red">*</span></div>
+                            <div class="col-md-6">
+                                @Html.TextBoxFor(model => model.ConfirmPassword, new { @class = "form-control", @required = "required", @type = "password" })
+                                @Html.ValidationMessageFor(model => model.ConfirmPassword)
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                    <button type="button" class="btn btn-primary btn-save">Cập nhật</button>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+<div class="panel with-nav-tabs panel-success">
+    <div class="panel-heading">
+        <ul class="nav nav-tabs">
+            <li class="active"><a href="#tab1success" data-toggle="tab"><i class="fa fa-users fa-3x" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<span class="tab-web">Danh sách người dùng</span></a></li>
+            <li class="viewcalendar"><a href="#tab2success" data-toggle="tab"><i class="fa fa fa-user-plus fa-3x" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp; <span class="tab-web">Thêm người dùng</span> </a></li>
+        </ul>
+    </div>
+    <div class="panel-body">
+        <div class="tab-content">
+            <div class="tab-pane fade active in" id="tab1success">
+                <div class="row">
+                    <div class="col-xs-12 col-md-12">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+
+                            </div>
+                            <div class="panel-body">
+
+                                <table id="list" class="display responsive nowrap" cellspacing="0" style="width:100%">
+                                    <thead>
+                                        <tr>
+                                            <th>Họ tên</th>
+                                            <th>Tên đăng nhập</th>
+                                            <th>Chức vụ</th>
+                                            <th>Phòng ban</th>
+                                            <th>Hành động</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td colspan="4" class="dataTables_empty">Xin đợi</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-pane fade" id="tab2success">
+                @{Html.RenderAction("Create", "NguoiDung");}
+            </div>
+        </div>
+    </div>
+</div>
+<div class="panel-footer">
+    &copy;Lâm nghiệp việt nam @DateTime.Now.Year
+    <span style="float:right">Hôm nay @DateTime.Today.ToString("dd/MM/yyyy")</span>
+</div>
+<script src="~/Scripts/fnReloadAjax.js"></script>
+<script>
+
+    $(document).ready(function () {
+        loadData();
+        function loadData() {
+            listTable = $("#list").dataTable({
+                "bProcessing": true,
+                "bServerSide": true,
+                "scrollX": false,
+                "autoWidth": true,
+                "sAjaxSource": '@Url.Action("GetJsonNguoiDung", "NguoiDung")',
+                "fnDrawCallback": function (oSettings) { },
+                "sPaginationType": "full_numbers",
+                "bStateSave": true,
+                "lengthMenu": [[10, 25, 50, 100], [10, 25, 50, 100]],
+
+                "aoColumns": [
+                          { sTitle: 'Họ tên', mData: 'HoTen', sWidth: '10%' },
+                            { sTitle: 'Tên đăng nhập', mData: 'UserName', sWidth: '10%' },
+                          { sTitle: 'Chức vụ', mData: 'TenChucVu', sWidth: '10%' },
+                          { sTitle: 'Phòng ban', mData: 'TenPhongBan', sWidth: '10%' },
+                         {
+                             sTitle: 'Hành động', mData: 'UserName', sWidth: '10%', className: "dt-center",
+                             mRender: function (data, type, full) {
+                                 var result = "";
+                                 result += "<a href='/NguoiDung/Edit?userName=" + full.UserName + "' class='text-delete'>Sửa</a>  ";
+                                 if (full.Role!='Admin') {
+                                     result += "| <a onclick=deleteData('" + full.UserName + "')	&lsquo; data-id='" + full.UserName + "' class='text-delete'>Xóa</a> ";
+                                 }
+                                 result += "| <a onclick=changePass('" + full.UserName + "')	&lsquo; data-id='" + full.UserName + "' class='text-delete'>Đổi mật khẩu</a>";
+                                 return result;
+                             }
+                         }
+                ],
+                "order": [[2, "desc"]],
+                "aoColumnDefs": [
+                    { 'bSortable': false, 'aTargets': [] }
+                ],
+                "language": {
+                    "lengthMenu": "Hiển thị _MENU_ bản ghi",
+                    "info": "Hiển thị _START_ đến _END_ trong _TOTAL_ bản ghi",
+                    "infoEmpty": "Hiển thị 0 từ 0 trong 0 bản ghi",
+                    "searchPlaceholder": "Họ tên, chức vụ, phòng ban",
+                    "search": "Tìm kiếm:",
+                    "paginate": {
+                        "first": "Đầu",
+                        "last": "Cuối",
+                        "next": "Tiếp",
+                        "previous": "Trước"
+                    },
+                    }
+            });
+        }
+    });
+    function deleteData(data_id) {
+        bootbox.confirm("Bạn có muốn xóa người này không?", function (result) {
+            if (result) {
+                $.ajax({
+                    type: "GET",
+                    url: "/NguoiDung/Delete/",
+                    data: { 'userName': data_id },
+                    success: function (result) {
+                        $('.bottom-right').notify({
+                            message: { text: 'Xóa người dùng thành công!' }
+                        }).show();
+                        $("#list").dataTable().fnReloadAjax();
+                    },
+                    error: function (err) {
+                        alert(err);
+                    }
+                });
+            }
+        });
+    }
+    function changePass(username) {
+        $('#modal-changepass').modal('toggle')
+        $('#nameuser').html(username);
+        $('#UserName').val(username); 
+        $('#Password').val('');
+        $('#ConfirmPassword').val('');
+        
+        $('.btn-save').click(function () {
+            if ($('#Password').val() == '' || $('#ConfirmPassword').val() == '') {
+                $('.field-validation-valid').html('');
+                $('.field-validation-valid').append('<span for="ConfirmPassword" class="">Mật khẩu không được để trống</span>');
+            }
+            if ($('.field-validation-error').html() == undefined && $('.field-validation-valid').html() == '') {
+                $.ajax({
+                    type: "GET",
+                    url: "/NguoiDung/ChangePassWord",
+                    data: { 'passWord': $('#Password').val(), 'userName': $('#UserName').val() },
+                    success: function () {
+                        $('.bottom-right').notify({
+                            message: { text: 'Cập nhật mật khẩu cho ' + $('#UserName').val() + ' thành công !' }
+                        }).show();
+                        $("#list").dataTable().fnReloadAjax();
+                        $('#modal-changepass').modal('hide');
+                    }
+                })
+            }
+        })
+
+    }
+</script>

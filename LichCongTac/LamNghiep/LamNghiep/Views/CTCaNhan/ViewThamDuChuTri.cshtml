@@ -1,0 +1,175 @@
+﻿@model IEnumerable<LamNghiep.DTO.KeHoachCongTacModel>
+
+
+@{
+    Layout = null;
+}
+<link href="~/Content/css/stylepage-ct-canhan.css" rel="stylesheet" />
+
+<script>
+    function ViewDetail(id) {
+        $('#ChiTietKeHoach').modal('show');
+        $.ajax({
+            type: "POST",
+            url: "/PhongBan/Details/" + id,
+            data: id,
+            success: function (result) {
+
+                $('span#hotencanbo').html(result.HoTen);
+                $('span#kehoachcongtac').html(result.KeHoachCongTac);
+                var date = new Date(parseInt(result.ThoiGian.substr(6)));
+                var formatted = ("0" + date.getDate()).slice(-2) + "-" + ("0" + (date.getMonth() + 1)).slice(-2) + "-" +
+                       date.getFullYear()
+                var denngay = new Date(parseInt(result.DenNgayView.substr(6)));
+                var denngayformatted = ("0" + denngay.getDate()).slice(-2) + "-" + ("0" + (denngay.getMonth() + 1)).slice(-2) + "-" +
+                       denngay.getFullYear()
+                $('span#ngayketthuc').html(denngayformatted);
+                $('span#thoigian').html(formatted);
+                $('span#diadiem').html(result.DiaDiem);
+                $('span#thanhphan').html(result.KhachThamDu);
+
+            },
+            error: function (err) {
+                alert(err);
+            }
+        })
+
+    }
+</script>
+
+<div class="modal fade" id="ChiTietKeHoach" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Kế hoạch công tác</h4>
+            </div>
+            <div class="modal-body">
+                <div class="alert alert-warning alert-datphong-cs">
+                    Còn <span id="ngayconlai"></span> ngày nữa
+                </div>
+                <div class="row">
+                    <div class="col-xs-3 col-md-3 control-label">Họ tên cán bộ :</div>
+                    <div class="col-xs-4 col-md-4">
+                        <span class="modal-content-span" id="hotencanbo"></span>
+                    </div>
+                    <div class="col-xs-5 col-md-5">
+                        <span class=""> Chức vụ: </span><span class="" id="chucvu"></span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-3 col-md-3 control-label"> Chủ trì :</div>
+                    <div class="col-xs-8 col-md-8 control-label">
+                        <span class="modal-content-span" id="chutri"></span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-4 col-md-4 control-label"> Kế hoạch công tác :</div>
+                    <div class="col-xs-8 col-md-8 control-label">
+                        <span class="modal-content-span" id="kehoachcongtac"></span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-3 col-md-3 control-label">Ngày bắt đầu :</div>
+                    <div class="col-xs-4  col-md-4 control-label">
+                        <span class="modal-content-span" id="thoigian"></span>
+                    </div>
+                    <div class="col-xs-2 col-md-2 control-label">
+                        <span>Từ giờ <i class="fa fa-clock-o" aria-hidden="true"></i></span>
+                        <span class="modal-content-span" id="tugio"></span>
+                    </div>
+                    <div class="col-xs-2  col-md-2 control-label">
+                        <span>Đến giờ <i class="fa fa-clock-o" aria-hidden="true"></i></span>
+                        <span class="modal-content-span" id="dengio"></span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-3 col-md-3 control-label">Ngày kết thúc :</div>
+                    <div class="col-xs-8  col-md-8 control-label">
+                        <span class="modal-content-span" id="ngayketthuc"></span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-3 col-md-3 control-label">Địa điểm :</div>
+                    <div class="col-xs-8  col-md-8 control-label">
+                        <span class="modal-content-span" id="diadiem"></span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-3 col-md-3 control-label">Tham dự : </div>
+                    <div class="col-xs-8 col-md-8 control-label">
+                        <span class="modal-content-span" id="thanhphan"></span>
+                    </div>
+                </div>
+                <div class="row" style="border:none;">
+                    <div class="col-xs-3 col-md-3 control-label">Nội dung:</div>
+                    <div class="col-xs-8  col-md-8 control-label">
+                        <span class="modal-content-span" id="noidung"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Đóng </button>
+            </div>
+        </div>
+    </div>
+</div>
+@{
+    int count = 0;
+    foreach (var item in Model)
+    {
+         foreach (var keHoach in item.ListCongTac)
+         {
+             count++;
+         }
+    }
+}
+<div class="panel panel-green">
+    <div class="panel-heading">
+        <i class="fa fa-folder-open-o" aria-hidden="true"></i> Lịch công tác tham dự/ chủ trì <span class="badge pull-right">@count</span></a>
+    </div>
+    <div class="panel-body">
+        @if (@Model == null)
+        {
+            <ul>
+                <li>
+                    Anh/Chị hôm này không có chủ trì/ tham dự nào!
+                </li>
+            </ul>
+        }
+        else
+        {
+            foreach (var item in Model)
+            {
+
+                <ul>
+                    @if (item.ListCongTac.Count > 0)
+                    {
+                        <li>
+                            @item.Ngay
+                            <ul>
+                                @foreach (var keHoach in item.ListCongTac)
+                                {
+                                    <li>
+                                        <a onclick="ViewDetail('@keHoach.IdKeHoach')">@keHoach.TenKeHoach (@keHoach.TuGio - @keHoach.DenGio)</a>
+                                        @if (keHoach.Kieu == 2)
+                                        {
+                                            <span class="label label-danger">Chủ trì</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="label label-success">Tham dự</span>
+                                        }
+                                    </li>
+                                }
+
+                            </ul>
+                        </li>
+                    }
+
+                </ul>
+            }
+        }
+
+    </div>
+</div>

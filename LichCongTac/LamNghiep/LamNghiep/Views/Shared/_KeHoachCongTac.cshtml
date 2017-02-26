@@ -1,0 +1,346 @@
+﻿
+@model IEnumerable<LamNghiep.DTO.KeHoachCongTacModel>
+<link href="~/Content/css/stylepage.css" rel="stylesheet" />
+<div class="item-subtab-plugin-load" id="t_-2_556_557">
+    <div align="center" style="padding: 10px 0 0 0;border-top:1px solid #ccc;">
+        <span style="font-weight: bold; font-size: 18px;">
+            LỊCH LÀM VIỆC CỦA LÃNH ĐẠO TỔNG CỤC THỦY SẢN
+        </span>
+    </div><div align="center" style="padding: 10px 0; font-size: 12px;">
+        <span>Tuần thứ </span><strong class="TuanSo">27</strong>
+        <span>từ ngày</span> <span class="TuNgay" _value="7/4/2016 12:00:00 AM" style="font-weight: bold">04/07/2016</span>
+        <span>đến ngày</span>
+        <span class="DenNgay" _value="7/10/2016 11:59:59 PM" style="font-weight: bold">10/07/2016</span>
+        <span style="display:none;" class="LanhDao_ID"></span>
+    </div><div class="date-nav-today" style="padding-bottom:10px;font-size:13px;">
+        <a style="cursor:pointer;" class="date-nav-prev" _value="7/4/2016 12:00:00 AM">
+            <strong>&lt;&lt; Tuần trước</strong>
+        </a>
+        <a>|</a>
+        <a style="cursor:pointer;" class="date-nav-next" _value="7/10/2016 11:59:59 PM">
+            <strong>Tuần tiếp theo &gt;&gt;</strong>
+        </a>
+        <a style="padding:0 0 0 20px;">Xem theo Lãnh Đạo</a>
+        <a>
+            <div class="selector">
+                <span>--Xem tất cả--</span><select class="LanhDaoTC" style="opacity: 0;">
+                    <option value="0" selected="selected">--Xem tất cả--</option>
+                    <option value="916" _chucvu="TTr, Tổng Cục trưởng">Vũ Văn Tám</option>
+                    <option value="941" _chucvu="Phó Tổng cục trưởng">Nguyễn Thị Thu Nguyệt</option>
+                    <option value="976" _chucvu="Phó Tổng Cục trưởng">Nguyễn Ngọc Oai</option>
+                </select>
+            </div>
+        </a><a class="link-parent" style="float:right;display:none;">Quay lại</a>
+    </div>
+
+    <div class="NoiDung-Lich-LanhDao">
+    </div>
+    <div style="margin:10px;font-size:13px;">
+        <strong>
+            <i>
+                Ghi chú : Đơn vị chủ trì chuẩn bị nội dung và mời các đơn vị liên quan
+            </i>
+        </strong>
+    </div>
+</div>
+<ul class="nav nav-tabs">
+    <li class="active"><a data-toggle="tab" href="#monday">Thứ 2</a></li>
+    <li><a data-toggle="tab" href="#tuesday">Thứ 3</a></li>
+    <li><a data-toggle="tab" href="#wednesday">Thứ 4</a></li>
+    <li><a data-toggle="tab" href="#thursday">Thứ 5</a></li>
+    <li><a data-toggle="tab" href="#friday">Thứ 6</a></li>
+    <li><a data-toggle="tab" href="#saturday">Thứ 7</a></li>
+    <li><a data-toggle="tab" href="#sunday">Chủ nhật</a></li>
+</ul>
+<script src="~/Content/js/jquery-1.12.3.js"></script>
+<script src="~/Content/js/jquery.dataTables.min.js"></script>
+<script src="~/Content/js/dataTables.bootstrap.min.js"></script>
+<script src="~/Content/js/dataTables.responsive.min.js"></script>
+<script src="~/Content/js/responsive.bootstrap.min.js"></script>
+<link href="~/Content/responsive.bootstrap.min.css" rel="stylesheet" />
+<link href="~/Content/dataTables.bootstrap.min.css" rel="stylesheet" />
+
+<style>
+    .wrapword {
+        white-space: -moz-pre-wrap !important; /* Mozilla, since 1999 */
+        white-space: -webkit-pre-wrap; /*Chrome & Safari */
+        white-space: -pre-wrap; /* Opera 4-6 */
+        white-space: -o-pre-wrap; /* Opera 7 */
+        white-space: pre-wrap; /* css-3 */
+        word-wrap: break-word; /* Internet Explorer 5.5+ */
+        word-break: break-all;
+        white-space: normal;
+    }
+</style>
+<link href="~/Content/bower_components/bootstrap/style.css" rel="stylesheet" />
+
+<div class="tab-content">
+    <div id="monday" class="tab-pane fade in active">
+        @foreach (var item in Model)
+        {
+            if ("Monday".Equals(item.Ngay))
+            {
+                <table class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0" width="100%">
+                    <thead>
+                        <tr>
+                            <th>Lãnh đạo</th>
+                            <th>T.gian</th>
+                            <th>Kế hoạch công tác</th>
+                            <th>Tham dự</th>
+                            <th>Địa điểm</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var itemcongtac in item.ListCongTac)
+                        {
+                            <tr>
+                                <td style="width:200px">
+                                    <strong>@itemcongtac.HoTen</strong>
+                                    <br>
+                                    <i>@itemcongtac.ChucVu</i>
+                                </td>
+                                <td>@itemcongtac.ThoiGian</td>
+                                <td class="wrapword"> @itemcongtac.KeHoachCongTac</td>
+                                <td class="wrapword">@itemcongtac.ThamDu</td>
+                                <td>35</td>
+
+                            </tr>
+
+                        }
+                    </tbody>
+                </table>
+            }
+        }
+    </div>
+    <div id="tuesday" class="tab-pane fade">
+        @foreach (var item in Model)
+        {
+            if ("Tuesday".Equals(item.Ngay))
+            {
+                <table class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0" width="100%">
+                    <thead>
+                        <tr>
+                            <th>Lãnh đạo</th>
+                            <th>T.gian</th>
+                            <th>Kế hoạch công tác</th>
+                            <th>Tham dự</th>
+                            <th>Địa điểm</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var itemcongtac in item.ListCongTac)
+                        {
+                            <tr>
+                                <td style="width:200px">
+                                    <strong>@itemcongtac.HoTen</strong>
+                                    <br>
+                                    <i>@itemcongtac.ChucVu</i>
+                                </td>
+                                <td>@itemcongtac.ThoiGian</td>
+                                <td class="wrapword"> @itemcongtac.KeHoachCongTac</td>
+                                <td class="wrapword">@itemcongtac.ThamDu</td>
+                                <td>35</td>
+
+                            </tr>
+
+                        }
+                    </tbody>
+                </table>
+            }
+        }
+    </div>
+    <div id="wednesday" class="tab-pane fade">
+        @foreach (var item in Model)
+        {
+            if ("Wednesday".Equals(item.Ngay))
+            {
+                <table class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0" width="100%">
+                    <thead>
+                        <tr>
+                            <th>Lãnh đạo</th>
+                            <th>T.gian</th>
+                            <th>Kế hoạch công tác</th>
+                            <th>Tham dự</th>
+                            <th>Địa điểm</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var itemcongtac in item.ListCongTac)
+                        {
+                            <tr>
+                                <td style="width:200px">
+                                    <strong>@itemcongtac.HoTen</strong>
+                                    <br>
+                                    <i>@itemcongtac.ChucVu</i>
+                                </td>
+                                <td>@itemcongtac.ThoiGian</td>
+                                <td class="wrapword"> @itemcongtac.KeHoachCongTac</td>
+                                <td class="wrapword">@itemcongtac.ThamDu</td>
+                                <td>35</td>
+
+                            </tr>
+
+                        }
+                    </tbody>
+                </table>
+            }
+        }
+    </div>
+    <div id="thursday" class="tab-pane fade">
+        @foreach (var item in Model)
+        {
+            if ("Thursday".Equals(item.Ngay))
+            {
+                <table class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0" width="100%">
+                    <thead>
+                        <tr>
+                            <th>Lãnh đạo</th>
+                            <th>T.gian</th>
+                            <th>Kế hoạch công tác</th>
+                            <th>Tham dự</th>
+                            <th>Địa điểm</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var itemcongtac in item.ListCongTac)
+                        {
+                            <tr>
+                                <td style="width:200px">
+                                    <strong>@itemcongtac.HoTen</strong>
+                                    <br>
+                                    <i>@itemcongtac.ChucVu</i>
+                                </td>
+                                <td>@itemcongtac.ThoiGian</td>
+                                <td class="wrapword"> @itemcongtac.KeHoachCongTac</td>
+                                <td class="wrapword">@itemcongtac.ThamDu</td>
+                                <td>35</td>
+
+                            </tr>
+
+                        }
+                    </tbody>
+                </table>
+            }
+        }
+    </div>
+    <div id="friday" class="tab-pane fade">
+        @foreach (var item in Model)
+        {
+            if ("Friday".Equals(item.Ngay))
+            {
+                <table class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0" width="100%">
+                    <thead>
+                        <tr>
+                            <th>Lãnh đạo</th>
+                            <th>T.gian</th>
+                            <th>Kế hoạch công tác</th>
+                            <th>Tham dự</th>
+                            <th>Địa điểm</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var itemcongtac in item.ListCongTac)
+                        {
+                            <tr>
+                                <td style="width:200px">
+                                    <strong>@itemcongtac.HoTen</strong>
+                                    <br>
+                                    <i>@itemcongtac.ChucVu</i>
+                                </td>
+                                <td>@itemcongtac.ThoiGian</td>
+                                <td class="wrapword"> @itemcongtac.KeHoachCongTac</td>
+                                <td class="wrapword">@itemcongtac.ThamDu</td>
+                                <td>35</td>
+
+                            </tr>
+
+                        }
+                    </tbody>
+                </table>
+            }
+        }
+    </div>
+    <div id="saturday" class="tab-pane fade">
+        @foreach (var item in Model)
+        {
+            if ("Saturday".Equals(item.Ngay))
+            {
+                <table class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0" width="100%">
+                    <thead>
+                        <tr>
+                            <th>Lãnh đạo</th>
+                            <th>T.gian</th>
+                            <th>Kế hoạch công tác</th>
+                            <th>Tham dự</th>
+                            <th>Địa điểm</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var itemcongtac in item.ListCongTac)
+                        {
+                            <tr>
+                                <td style="width:200px">
+                                    <strong>@itemcongtac.HoTen</strong>
+                                    <br>
+                                    <i>@itemcongtac.ChucVu</i>
+                                </td>
+                                <td>@itemcongtac.ThoiGian</td>
+                                <td class="wrapword"> @itemcongtac.KeHoachCongTac</td>
+                                <td class="wrapword">@itemcongtac.ThamDu</td>
+                                <td>35</td>
+
+                            </tr>
+
+                        }
+                    </tbody>
+                </table>
+            }
+        }
+    </div>
+    <div id="sunday" class="tab-pane fade">
+        @foreach (var item in Model)
+        {
+            if ("Sunday".Equals(item.Ngay))
+            {
+                <table class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0" width="100%">
+                    <thead>
+                        <tr>
+                            <th>Lãnh đạo</th>
+                            <th>T.gian</th>
+                            <th>Kế hoạch công tác</th>
+                            <th>Tham dự</th>
+                            <th>Địa điểm</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var itemcongtac in item.ListCongTac)
+                        {
+                            <tr>
+                                <td style="width:200px">
+                                    <strong>@itemcongtac.HoTen</strong>
+                                    <br>
+                                    <i>@itemcongtac.ChucVu</i>
+                                </td>
+                                <td>@itemcongtac.ThoiGian</td>
+                                <td class="wrapword"> @itemcongtac.KeHoachCongTac</td>
+                                <td class="wrapword">@itemcongtac.ThamDu</td>
+                                <td>35</td>
+
+                            </tr>
+
+                        }
+                    </tbody>
+                </table>
+            }
+        }
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $('.example').DataTable({
+            responsive: true,
+            paging: false
+        });
+    });
+</script>

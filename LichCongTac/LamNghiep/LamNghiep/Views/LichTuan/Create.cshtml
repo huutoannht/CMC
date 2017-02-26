@@ -1,0 +1,143 @@
+﻿@model IList<LamNghiep.DTO.KeHoachCT>
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Master.cshtml";
+}
+<script src="~/Content/assets/js/jquery-1.11.3.min.js"></script>
+@*<script src="~/Content/select/select2.js"></script>
+<link href="~/Content/select/select2.min.css" rel="stylesheet" />
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>*@
+
+
+
+
+@*VALIDATE*@
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
+<div class="row">
+    <div class="col-xs-12">
+        <!-- PAGE CONTENT BEGINS -->
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="form-group">
+                    <form action="/LichTuan/Create" method="post" id="frmCreate">
+                        <div class="form-group has-success row">
+                            <div class="col-md-2 ">
+                                <button class="btn btn-default" id="btnTuanTruoc">Tuần trước</button>
+                            </div>
+                            <div class="col-md-4">
+                                @Html.DropDownList("TuanLe", null, new { @class = "tuanle form-control" })
+                            </div>
+                            <div class="col-md-2 ">
+                                <button class="btn btn-default" id="btnTuanSau">Tuần sau</button>
+                            </div>
+                            <div class="col-md-4 ">
+                            </div>
+                        </div>
+                        <table id="table-lich-canhan" class="table  table-bordered table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Nội dung</th>
+                                    <th>Chỉ đạo</th>
+                                    <th>Hạn hoàn thành</th>
+                                    <th>Địa điểm</th>
+                                    <th>Hành động</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @for (int i = 0; i < Model.Count; i++)
+                                {
+                                    <tr id="text-record">
+                                        <td>
+                                            @Html.TextAreaFor(m => m[i].TenKeHoach, new { @class = "autosize-transition form-control" })
+                                            @Html.ValidationMessageFor(m => m[i].TenKeHoach)
+                                        </td>
+
+                                        <td>
+                                            <select multiple="multiple" class="form-control example-multiple-optgroups" name="[0].ChuTri">
+                                                @foreach (var item in (List<LamNghiep.DTO.PhongBan>)ViewBag.ListPhongBanDistinct)
+                                                {
+                                                    <optgroup label="@item.TenPhongBan">
+                                                        @foreach (var itemphongban in (List<LamNghiep.DTO.PhongBan>)ViewBag.ListPhongBan)
+                                                        {
+                                                            if (itemphongban.MaPhongBan == item.MaPhongBan)
+                                                            {
+                                                                <option value="@itemphongban.UserName">@itemphongban.HoTen</option>
+                                                            }
+                                                        }
+                                                    </optgroup>
+                                                }
+                                            </select>
+                                        </td>
+                                        <td>
+                                            <div class="input-group">
+                                                @Html.TextBoxFor(m => m[i].DenNgay, new { @class = "form-control date-picker"})
+                                                <span class="input-group-addon">
+                                                    <i class="fa fa-calendar bigger-110"></i>
+                                                </span>
+                                                @Html.ValidationMessageFor(m => m[i].DenNgayModel)
+                                            </div>
+                                        </td>
+                                        <td>
+                                            @Html.TextBoxFor(m => m[i].DiaDiem, new { @class = "form-control" })
+                                            @Html.ValidationMessageFor(m => m[i].DiaDiem)
+                                        </td>
+                                        <td>
+                                            <span class="btn btn-danger btn-delete" onclick="deleteRow(this);">Xóa</span>
+                                        </td>
+                                    </tr>
+                                }
+
+                            </tbody>
+                        </table>
+                    </form>
+                </div>
+            </div><!-- /.span -->
+            <div class="col-md-12">
+                <p>
+                    <button class="btn btn-primary" id="btn-add-record">Thêm công việc</button>
+                    <button class="btn btn-success" id="btn-save-data">Lưu</button>
+                </p>
+            </div>
+        </div><!-- /.row -->
+
+        <div class="hr hr-18 dotted hr-double"></div>
+    </div>
+</div>
+
+<script>
+    var rowCount = $("#table-lich-canhan").length;
+    var select = '<tr>' + $('#text-record').html().replace('[0]', '[' + rowCount + ']') + '</tr>';
+    $(document).ready(function () {
+        $('.date-picker').datepicker({
+            autoclose: true,
+            todayHighlight: true
+        })
+        LoadSelect();
+    })
+   
+    function deleteRow(data) {
+        $(data).parent().parent().remove();
+        return false;
+    }
+
+    function LoadSelect() {
+        $('.example-multiple-optgroups').select2({
+            tags: true,
+        });
+    }
+    var strtable = ' <tr style="border: 1px solid #ddd;"><td><textarea type="text" name="[' + rowCount + '].TenKeHoach" class="autosize-transition form-control"></textarea> </td><td>' + select + '</td><td><input type="time" name="[' + rowCount + '].DenNgay" /> </td><td><input type="time" name="[' + rowCount + '].DanhGia" /></td></tr>';
+    $("#btn-add-record").click(function () {
+        $("#table-lich-canhan tbody").append(select);
+        $('.date-picker').datepicker({
+            autoclose: true,
+            todayHighlight: true
+        });
+        LoadSelect();
+    })
+    $("#btn-save-data").click(function () {
+        $("#frmCreate").submit();
+    })
+</script>

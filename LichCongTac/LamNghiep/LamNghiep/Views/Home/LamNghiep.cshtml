@@ -1,0 +1,202 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+@{
+    Layout = null;
+}
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Tổng cục lâm nghiệp Việt nam</title></a>
+    <link href="../../Content/dist/css/sb-admin-2.css" rel="stylesheet" />
+    <!-- Bootstrap Core CSS -->
+    <link href="../../Content/bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- MetisMenu CSS -->
+    <link href="../../Content/bower_components/metisMenu/dist/metisMenu.min.css" rel="stylesheet">
+
+    <!-- Timeline CSS -->
+    <link href="../../Content/dist/css/timeline.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link href="../../Content/dist/css/sb-admin-2.css" rel="stylesheet">
+
+    <!-- Morris Charts CSS -->
+    <link href="../../Content/bower_components/morrisjs/morris.css" rel="stylesheet">
+
+    <!-- Custom Fonts -->
+    <link href="../../Content/bower_components/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+
+    <link href="~/Content/css/stylepage.css" rel="stylesheet" />
+    <script src="~/Content/js/jquery-1.12.3.js"></script>
+    <style>
+        table.hdrNameBg {
+            display: none;
+        }
+
+        table.hdrTabBg {
+            display: none;
+        }
+        #hidden-frame {
+            height: 115px;
+            position: fixed;
+            background-color: #fff;
+            line-height: 147px;
+            margin-top: -15px;
+            z-index: 9999;
+            width: 1179px;
+        }
+       
+        #title-lichlanhdao {
+            margin-top: -120px;
+            font-weight: lighter;
+            color: #69AA48 !important;
+            font-size: 30px;
+        }
+        #tab2success {
+            height: 300px;
+        }
+    </style>
+</head>
+
+<body>
+
+
+    <div id="wrapper">
+
+        <!-- Navigation -->
+        <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <img src="~/Content/images/tcln_ico.png" alt="Logo" />
+                <span class="title"><a href="../Home/Index">TỔNG CỤC LÂM NGHIỆP VIỆT NAM</a></span>
+            </div>
+            <!-- /.navbar-header -->
+
+            <!-- /.navbar-top-links -->
+
+            <div class="navbar-default sidebar" role="navigation">
+                <div class="sidebar-nav navbar-collapse collapse" aria-expanded="false">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class=" panel panel-default">
+                                <div class="panel-heading">
+                                    <h3 class="panel-title">Đăng nhập hệ thống</h3>
+                                </div>
+                                <div class="panel-body">
+                                    @using (Html.BeginForm("Index", "DangNhap"))
+                                    {
+                                        <fieldset>
+                                            <div class="form-group">
+                                                <input class="form-control" placeholder="Tên đăng nhập" name="Username" autofocus>
+                                            </div>
+                                            <div class="form-group">
+                                                <input class="form-control" placeholder="Mật khẩu" name="Password" type="password" value="">
+                                            </div>
+                                            <div class="checkbox">
+                                                <label>
+                                                    <input name="remember" type="checkbox" value="Remember Me">Ghi nhớ mật khẩu
+                                                </label>
+                                            </div>
+                                            <!-- Change this to a button or input when using this as a form -->
+                                            <input type="submit" class="btn btn-lg btn-success btn-block" value="Đăng nhập" />
+                                        </fieldset>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <!-- /.sidebar-collapse -->
+            </div>
+            <!-- /.navbar-static-side -->
+        </nav>
+
+        <div id="page-wrapper">
+            <div class="panel with-nav-tabs panel-success">
+               
+                <div class="panel-body">
+                    <div class="tab-content">
+
+                        <div class="tab-pane fade active in" id="tab2success">
+                            <div id="hidden-frame">
+                                <div class="panel-heading  panel-heading-index">
+                                    <ul class="nav nav-tabs">
+                                        <li class="active"><a href="#tab2success" data-toggle="tab"><i class="fa fa-calendar fa-3x" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp; Kế hoạch công tác</a></li>
+                                    </ul>
+                                </div>
+                                <div id="title-lichlanhdao">Lịch công tác lãnh đạo</div>
+                            </div>
+                            <div class="embed-responsive embed-responsive-16by9">
+                                <form id="login" target="frame" method="post" action="http://eoffice.vnforest.gov.vn/loginExc.vng">
+                                    <input type="hidden" name="account" value="tongcuclamnghiep" />
+                                    <input type="hidden" name="password" value="lamnghiep" />
+                                </form>
+                                <iframe id="frame" name="frame"></iframe>
+                                <div id="content-lamnghiep">
+                                    <iframe class="embed-responsive-item" name="framelamnghiep"
+                                            id="framelamnghiep" src="http://eoffice.vnforest.gov.vn/wokingschedule/leader_wokingschedules.vng?menu=2"></iframe>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="tab-pane fade" id="tab3success">
+                           
+                        </div>
+
+                    </div>
+                </div>
+                <div class="panel-footer">
+                    &copy;Lâm nghiệp việt nam @DateTime.Now.Year
+                </div>
+            </div>
+        </div>
+        <!-- /#page-wrapper -->
+
+    </div>
+    <!-- /#wrapper -->
+    <!-- jQuery -->
+    <!-- Bootstrap Core JavaScript -->
+    <script src="../../Content/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+
+    <!-- Metis Menu Plugin JavaScript -->
+    <script src="../../Content/bower_components/metisMenu/dist/metisMenu.min.js"></script>
+
+    <!-- Morris Charts JavaScript -->
+    <script src="../../Content/bower_components/raphael/raphael-min.js"></script>
+    <script src="../../Content/bower_components/morrisjs/morris.min.js"></script>
+
+    <!-- Custom Theme JavaScript -->
+   @* <script src="../../Content/dist/js/sb-admin-2.js"></script>*@
+
+    <script src="~/Content/datetimepicker/jquery.datetimepicker.full.js"></script>
+
+    <link href="~/Content/datetimepicker/jquery.datetimepicker.min.css" rel="stylesheet" />
+
+    <script>
+        $('#side-menu').metisMenu();
+        $('#login').submit();
+        setTimeout(function () {
+            $('#framelamnghiep').attr('src', $('#framelamnghiep').attr('src'));
+        }, 2000);
+        $(document).ready(function () {
+            $('.navbar-toggle').click(function () {
+              
+            });
+        });
+    
+    </script>
+</body>
+
+</html>
